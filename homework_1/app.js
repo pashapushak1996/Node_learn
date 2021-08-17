@@ -49,3 +49,39 @@ const fileReplacer = (pathsArray) => {
 
 
 fileReplacer([pathToGirls, pathToBoys]);
+
+//Hard task
+
+const folderPath = path.join(__dirname, 'folder');
+
+const flat = (pathToDir) => {
+
+    fs.readdir(pathToDir, (err, files) => {
+
+        files.forEach((file) => {
+
+            const pathToNextDir = path.join(pathToDir, file);
+
+            fs.stat(pathToNextDir, (err, stats) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+
+                if (stats.isDirectory()) {
+                    flat(pathToNextDir);
+                } else {
+                    const pathWithFileName = path.join(folderPath, file);
+
+                    fs.rename(pathToNextDir, pathWithFileName, err => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                }
+            });
+        });
+    });
+};
+
+flat(__dirname);
