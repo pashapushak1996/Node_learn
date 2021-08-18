@@ -28,30 +28,30 @@ const pathToManYounger20 = path.join(__dirname, 'manYounger20');
 const pathToWomanOlder20 = path.join(__dirname, 'womanOlder20');
 const pathToWomanYounger20 = path.join(__dirname, 'womanYounger20');
 
-const selectPathByAge = ({name, gender, age}) => {
+const createPathByAge = ({name, gender, age}, fileExtension) => {
     const manOlder20 = age > 20 && gender === 'male';
     const manYounger20 = age <= 20 && gender === 'male';
     const womanOlder20 = age > 20 && gender === 'female';
     const womanYounger20 = age <= 20 && gender === 'female';
 
     if (manOlder20) {
-        return path.join(pathToManOlder20, `${ name }.json`);
+        return path.join(pathToManOlder20, `${ name }.${ fileExtension }`);
     }
     if (manYounger20) {
-        return path.join(pathToManYounger20, `${ name }.json`);
+        return path.join(pathToManYounger20, `${ name }.${ fileExtension }`);
     }
     if (womanOlder20) {
-        return path.join(pathToWomanOlder20, `${ name }.json`);
+        return path.join(pathToWomanOlder20, `${ name }.${ fileExtension }`);
     }
     if (womanYounger20) {
-        return path.join(pathToWomanYounger20, `${ name }.json`);
+        return path.join(pathToWomanYounger20, `${ name }.${ fileExtension }`);
     }
 }
 
-const create = (array) => {
+const createUserFile = (array) => {
     array.forEach((user) => {
         const userObj = JSON.stringify(user);
-        fs.writeFile(selectPathByAge(user), userObj, err => {
+        fs.writeFile(createPathByAge(user, 'json'), userObj, err => {
             if (err) {
                 console.log(err);
             }
@@ -59,5 +59,4 @@ const create = (array) => {
     });
 };
 
-
-createFolder(users);
+createUserFile(users);
