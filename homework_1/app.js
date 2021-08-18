@@ -70,15 +70,17 @@ const flat = (pathToDir) => {
 
                 if (stats.isDirectory()) {
                     flat(pathToNextDir);
-                } else {
-                    const pathWithFileName = path.join(folderPath, file);
-
-                    fs.rename(pathToNextDir, pathWithFileName, err => {
-                        if (err) {
-                            console.log(err);
-                        }
-                    });
+                    return;
                 }
+
+                const pathWithFileName = path.join(folderPath, file);
+
+                fs.rename(pathToNextDir, pathWithFileName, err => {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
+
             });
         });
     });
