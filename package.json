@@ -1,0 +1,22 @@
+{
+  "name": "node_learn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pashapushak1996/Node_learn.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pashapushak1996/Node_learn/issues"
+  },
+  "homepage": "https://github.com/pashapushak1996/Node_learn#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
