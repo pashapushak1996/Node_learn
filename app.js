@@ -35,16 +35,18 @@ app.get(`/login`, (req, res) => {
 
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
-    const currentUser = users.find((user, password) => user.email === email);
-    const isLogged = currentUser?.password === password && password.length > 0;
+    const currentUser = users.find((user) => user.email === email);
+
 
     if (!currentUser) {
         res.render('register');
         return;
     }
 
+    const isLogged = currentUser?.password === password;
+
     if (isLogged) {
-        res.render('users', { currentUser, users });
+        res.render('user', { currentUser });
         return;
     }
 
@@ -68,7 +70,7 @@ app.get(`/users/:user_id`, (req, res) => {
         return;
     }
 
-    res.render(`users`, { currentUser });
+    res.render(`user`, { currentUser, user_id });
 });
 
 
@@ -80,14 +82,21 @@ app.get(`/register`, (req, res) => {
 app.post('/register', ((req, res) => {
     const { email, password } = req.body;
     const currentUser = users.find((user) => user.email === email);
-
-    if (!currentUser) {
-        users.push(req.body);
-        res.render('login');
-    }
+    const isPasswordExist = password.length !== 0;
 
     if (currentUser) {
         res.end('This user is exist');
+        return;
+    }
+
+    if (!currentUser && isPasswordExist) {
+        users.push(req.body);
+        res.render('login');
+        return;
+    }
+
+    if (!isPasswordExist) {
+        res.status(400).end('You must write password');
     }
 
 }));

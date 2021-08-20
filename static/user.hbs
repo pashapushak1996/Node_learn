@@ -8,11 +8,12 @@
     <title>Document</title>
 </head>
 <body>
-{{#if users}}
-    <h1>All users</h1>
-    {{#each users}}
-        <div>{{this.email}}</div>
-    {{/each}}
+{{#if currentUser}}
+    <h1>Welcome</h1>
+    <span>{{currentUser.email}}</span>
+    {{#if user_id}}
+        <a href="/users">All Users</a>
+    {{/if}}
 {{/if}}
 </body>
 </html>
