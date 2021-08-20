@@ -11,7 +11,7 @@
 {{#if currentUser}}
     <h1>Welcome</h1>
     <span>{{currentUser.email}}</span>
-    {{#if user_id}}
+    {{#if isLogged}}
         <a href="/users">All Users</a>
     {{/if}}
 {{/if}}

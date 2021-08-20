@@ -1,6 +1,5 @@
 const express = require('express');
 const expressHbs = require('express-handlebars');
-const fs = require('fs');
 const path = require('path');
 
 const { PORT } = require('./config/variables');
@@ -47,7 +46,7 @@ app.post('/login', (req, res) => {
     const isLogged = currentUser?.password === password;
 
     if (isLogged) {
-        res.render('user', { currentUser });
+        res.render('user', { currentUser ,isLogged});
         return;
     }
 
@@ -71,7 +70,7 @@ app.get(`/users/:user_id`, (req, res) => {
         return;
     }
 
-    res.render(`user`, { currentUser, user_id });
+    res.render(`user`, { currentUser });
 });
 
 
@@ -102,6 +101,3 @@ app.post('/register', ((req, res) => {
 
 }));
 
-const saveUserToDb = (user) => {
-
-}
