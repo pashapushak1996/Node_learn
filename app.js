@@ -1,5 +1,6 @@
 const express = require('express');
 const expressHbs = require('express-handlebars');
+const fs = require('fs');
 const path = require('path');
 
 const { PORT } = require('./config/variables');
@@ -100,3 +101,7 @@ app.post('/register', ((req, res) => {
     }
 
 }));
+
+const saveUserToDb = (user) => {
+
+}
