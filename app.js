@@ -5,38 +5,35 @@ const path = require('path');
 const { PORT } = require('./config/variables');
 const users = require('./db/users');
 
+const staticFolderPath = path.join(__dirname, 'static');
+
 const app = express();
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'static')));
+app.use(express.static(staticFolderPath));
 app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', '.hbs');
 app.engine('.hbs', expressHbs({
     defaultLayout: false
 }));
-app.set('views', path.join(__dirname, 'static'));
-
+app.set('views', path.join(staticFolderPath));
 
 app.listen(PORT, () => {
     console.log('Localhost:', PORT);
 });
 
-
 app.get(`/`, (req, res) => {
     res.render('home');
 })
-
 
 app.get(`/login`, (req, res) => {
     res.render(`login`);
 });
 
-
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
     const currentUser = users.find((user) => user.email === email);
-
 
     if (!currentUser) {
         res.render('register');
@@ -56,11 +53,9 @@ app.post('/login', (req, res) => {
 
 });
 
-
 app.get(`/users`, (req, res) => {
     res.render(`users`, { users });
 });
-
 
 app.get(`/users/:user_id`, (req, res) => {
     const { user_id } = req.params;
@@ -78,7 +73,6 @@ app.get(`/users/:user_id`, (req, res) => {
 app.get(`/register`, (req, res) => {
     res.render('register');
 });
-
 
 app.post('/register', ((req, res) => {
     const { email, password } = req.body;
