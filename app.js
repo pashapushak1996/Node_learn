@@ -45,14 +45,15 @@ app.post('/login', (req, res) => {
 
     const isLogged = currentUser?.password === password;
 
-    if (isLogged) {
-        res.render('user', { currentUser, isLogged });
-        return;
-    }
-
     if (!isLogged) {
         res.end('Your password is wrong');
     }
+
+    if (isLogged) {
+        res.render('user', { currentUser ,isLogged});
+        return;
+    }
+
 });
 
 
@@ -82,14 +83,12 @@ app.get(`/register`, (req, res) => {
 app.post('/register', ((req, res) => {
     const { email, password } = req.body;
     const currentUser = users.find((user) => user.email === email);
-
+    const isPasswordExist = password.length !== 0;
 
     if (currentUser) {
         res.end('This user is exist');
         return;
     }
-
-    const isPasswordExist = password.length !== 0;
 
     if (!currentUser && isPasswordExist) {
         users.push(req.body);
