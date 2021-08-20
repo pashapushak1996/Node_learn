@@ -5,9 +5,11 @@ const path = require('path');
 const { PORT } = require('./config/variables');
 const users = require('./db/users');
 
-const staticFolderPath = path.join(__dirname, 'static');
+
 
 const app = express();
+
+const staticFolderPath = path.join(__dirname, 'static');
 
 app.use(express.json());
 app.use(express.static(staticFolderPath));
