@@ -6,7 +6,6 @@ const { PORT } = require('./config/variables');
 const users = require('./db/users');
 
 
-
 const app = express();
 
 const staticFolderPath = path.join(__dirname, 'static');
@@ -19,7 +18,7 @@ app.set('view engine', '.hbs');
 app.engine('.hbs', expressHbs({
     defaultLayout: false
 }));
-app.set('views', path.join(staticFolderPath));
+app.set('views', staticFolderPath);
 
 app.listen(PORT, () => {
     console.log('Localhost:', PORT);
