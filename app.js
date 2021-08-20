@@ -43,14 +43,14 @@ app.post('/login', (req, res) => {
         return;
     }
 
-    const isLogged = currentUser?.password === password;
+    const isLogged = currentUser.password === password;
 
     if (!isLogged) {
         res.end('Your password is wrong');
     }
 
     if (isLogged) {
-        res.render('user', { currentUser ,isLogged});
+        res.render('user', { currentUser, isLogged });
         return;
     }
 
@@ -90,15 +90,13 @@ app.post('/register', ((req, res) => {
         return;
     }
 
-    if (!currentUser && isPasswordExist) {
-        users.push(req.body);
-        res.render('login');
+    if (!isPasswordExist) {
+        res.status(400).end('You must write password');
         return;
     }
 
-    if (!isPasswordExist) {
-        res.status(400).end('You must write password');
-    }
+    users.push(req.body);
+    res.render('login');
 
 }));
 
