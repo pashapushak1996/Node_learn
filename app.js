@@ -98,4 +98,5 @@ app.post(`/users`, async (req, res) => {
 
 app.get(`/users/:user_id`, (req, res) => {
     const { user_id } = req.params;
+
 })
