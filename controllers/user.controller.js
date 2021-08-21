@@ -14,11 +14,10 @@ module.exports = {
         res.json(currentUser);
     },
     createUser: (req, res) => {
-        console.log(req.body);
         const { email, password } = req.body;
         const currentUser = users.find((user) => user.email === email);
 
-        if (!currentUser) {
+        if (currentUser) {
             res.json('User is exist');
             return;
         }
@@ -33,7 +32,8 @@ module.exports = {
 
         if (isPasswordExist) {
             users.push(createdUser);
-            res.json(`user ${email} created`, users);
+            res.json(users);
+            return;
         }
 
         res.status(400).json('password is required');
@@ -51,7 +51,23 @@ module.exports = {
         res.status(200).json(filteredUsers);
     },
     updateUser: (req, res) => {
-        console.log(req);
-        console.log(res);
+        const { user_id } = req.params;
+
+        const currentUser = users[+user_id];
+
+        if (!currentUser) {
+            res.status(404).json('User not found');
+            return;
+        }
+
+        const updatedUsers = users.map((user) => {
+            if (user.userId === +user_id) {
+                user = { ...user, ...req.body };
+                return user;
+            }
+            return user;
+        });
+
+        res.status(200).json(updatedUsers);
     }
 };

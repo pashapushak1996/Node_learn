@@ -1,7 +1,7 @@
 const express = require('express');
 
 const { PORT } = require('./config/varialbles');
-const { userRouter } = require('./routes');
+const { userRouter, authRouter } = require('./routes');
 
 const app = express();
 
@@ -13,3 +13,4 @@ app.listen(PORT, () => {
 });
 
 app.use('/users', userRouter);
+app.use('/auth', authRouter);
