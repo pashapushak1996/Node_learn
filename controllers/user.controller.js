@@ -5,8 +5,7 @@ module.exports = {
         res.json(users);
     },
     getUserById: (req, res) => {
-        console.log(req.body);
-        const { user_id } = req.body;
+        const { user_id } = req.params;
         const currentUser = users[user_id];
         if (!currentUser) {
             return res.status(404).json('user not found');
@@ -15,10 +14,11 @@ module.exports = {
         res.json(currentUser);
     },
     createUser: (req, res) => {
+        console.log(req.body);
         const { email, password } = req.body;
         const currentUser = users.find((user) => user.email === email);
 
-        if (currentUser) {
+        if (!currentUser) {
             res.json('User is exist');
             return;
         }
@@ -46,9 +46,9 @@ module.exports = {
             res.status(404).json('User not found');
         }
 
-        users.filter((user) => user.userId !== user_id);
+        const filteredUsers = users.filter((user) => user.userId !== +user_id);
 
-        res.status(200).json(`user ${selectedUser.email} deleted`, users);
+        res.status(200).json(filteredUsers);
     },
     updateUser: (req, res) => {
         console.log(req);
