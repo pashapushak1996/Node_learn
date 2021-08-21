@@ -4,8 +4,17 @@ module.exports = {
     getUsers: (req, res) => {
         res.json(users);
     },
-    createUser: (req, res) => {
+    getUserById: (req, res) => {
         console.log(req.body);
+        const { user_id } = req.body;
+        const currentUser = users[user_id];
+        if (!currentUser) {
+            return res.status(404).json('user not found');
+        }
+
+        res.json(currentUser);
+    },
+    createUser: (req, res) => {
         const { email, password } = req.body;
         const currentUser = users.find((user) => user.email === email);
 
@@ -24,7 +33,7 @@ module.exports = {
 
         if (isPasswordExist) {
             users.push(createdUser);
-            res.json(`user ${ email } created`, users);
+            res.json(`user ${email} created`, users);
         }
 
         res.status(400).json('password is required');
@@ -39,9 +48,10 @@ module.exports = {
 
         users.filter((user) => user.userId !== user_id);
 
-        res.status(200).json(`user ${ selectedUser.email } deleted`, users);
+        res.status(200).json(`user ${selectedUser.email} deleted`, users);
     },
     updateUser: (req, res) => {
-
+        console.log(req);
+        console.log(res);
     }
 };
