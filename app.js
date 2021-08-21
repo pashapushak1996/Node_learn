@@ -98,5 +98,4 @@ app.post(`/users`, async (req, res) => {
 
 app.get(`/users/:user_id`, (req, res) => {
     const { user_id } = req.params;
-// TODO запихати в базу даних юзерів так щоб кожного разу їх  не витягувати
 })
