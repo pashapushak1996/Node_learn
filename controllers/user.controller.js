@@ -25,6 +25,7 @@ module.exports = {
 
         const isValidData = userDataValidator(email, password);
         const lastUserId = users.pop().userId;
+
         const createdUser = {
             userId: lastUserId + 1,
             email,
@@ -70,6 +71,6 @@ module.exports = {
             return user;
         });
 
-        res.status(200).json(updatedUsers);
+        res.status(202).json(updatedUsers);
     }
 };
