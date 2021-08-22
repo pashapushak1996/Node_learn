@@ -7,7 +7,7 @@ module.exports = {
         const currentUser = users.find((user) => user.email === email);
 
         if (!currentUser) {
-            res.redirect('/register');
+            res.status(404).json('User not found');
             return;
         }
 
