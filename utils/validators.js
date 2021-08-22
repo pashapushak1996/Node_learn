@@ -15,7 +15,7 @@ const userDataValidator = (email, password) => {
         return null;
     }
 
-    return { email, password };
+    return true;
 };
 
 module.exports = {
