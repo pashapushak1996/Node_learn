@@ -1,7 +1,8 @@
 const users = require('../db/users');
+const { userDataValidator } = require('../utils/validators');
 
 module.exports = {
-    getUsers: (req, res) => {
+    getAllUsers: (req, res) => {
         res.json(users);
     },
     getUserById: (req, res) => {
@@ -22,7 +23,7 @@ module.exports = {
             return;
         }
 
-        const isPasswordExist = password.length > 0;
+        const isValidData = userDataValidator(email, password);
         const lastUserId = users.pop().userId;
         const createdUser = {
             userId: lastUserId + 1,
@@ -30,13 +31,13 @@ module.exports = {
             password
         };
 
-        if (isPasswordExist) {
+        if (isValidData) {
             users.push(createdUser);
             res.json(users);
             return;
         }
 
-        res.status(400).json('password is required');
+        res.status(400).json('Email or password is incorrect');
     },
     deleteUser: (req, res) => {
         const { user_id } = req.params;
