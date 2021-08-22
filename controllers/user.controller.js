@@ -33,7 +33,7 @@ module.exports = {
 
         if (isValidData) {
             users.push(createdUser);
-            res.json(users);
+            res.status(201).json(users);
             return;
         }
 
@@ -45,6 +45,7 @@ module.exports = {
 
         if (!selectedUser) {
             res.status(404).json('User not found');
+            return;
         }
 
         const filteredUsers = users.filter((user) => user.userId !== +user_id);
