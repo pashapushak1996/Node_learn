@@ -10,8 +10,7 @@ const userDataValidator = (email, password) => {
 
     const isValidEmail = domains.includes(domain) && email.includes('@');
     const isValidPassword = password.length > 0;
-
-    if (!isValidEmail && !isValidPassword) {
+    if (!isValidEmail || !isValidPassword) {
         return null;
     }
 
