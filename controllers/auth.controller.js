@@ -7,7 +7,7 @@ module.exports = {
         const currentUser = users.find((user) => user.email === email);
 
         if (!currentUser) {
-            res.status(404).json('User not found');
+            res.redirect('auth/register');
             return;
         }
 
@@ -19,5 +19,8 @@ module.exports = {
         }
 
         res.status(401).json('Password incorrect');
+    },
+    register: (req, res) => {
+        res.json('register page');
     }
 };
