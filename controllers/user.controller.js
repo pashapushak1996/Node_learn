@@ -9,7 +9,9 @@ module.exports = {
 
     getUserById: async (req, res) => {
         const { user_id } = req.params;
-        const currentUser = await userService.getUserById(user_id);
+        const users = await userService.getUsersFromDB();
+
+        const currentUser = users.find((user) => user.userId === user_id);
 
         if (!currentUser) {
             return res.status(404).json('user not found');
@@ -21,6 +23,7 @@ module.exports = {
     createUser: async (req, res) => {
         const { email, password } = req.body;
         const users = await userService.getUsersFromDB();
+
         const currentUser = users.find((user) => user.email === email);
 
         if (currentUser) {
@@ -50,6 +53,7 @@ module.exports = {
     deleteUser: async (req, res) => {
         const { user_id } = req.params;
         const users = await userService.getUsersFromDB();
+
         const selectedUser = users.find((user) => user.userId === +user_id);
 
         if (!selectedUser) {
@@ -58,10 +62,12 @@ module.exports = {
         }
 
         const filteredUsers = users.filter((user) => user.userId !== user_id);
+
         await userService.setUsersToDB(filteredUsers);
 
-        res.status(200).json(filteredUsers);
-    },
+        res.status(204);
+    }
+    ,
 
     updateUser: async (req, res) => {
         const { user_id } = req.params;

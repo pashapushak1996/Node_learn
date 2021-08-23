@@ -10,6 +10,7 @@ module.exports = {
         const users = await fs.readFile(pathToDB);
         return dataToJson(users);
     },
+
     setUsersToDB: async (users) => {
         const usersStringify = JSON.stringify(users);
         await fs.writeFile(pathToDB, usersStringify);
