@@ -3,8 +3,9 @@ const userService = require('../services/user.service');
 module.exports = {
     login: (req, res) => {
         const { email, password } = req.body;
+        const users = userService.getUsersFromDB();
 
-        const currentUser = userService.findUserByEmail(email);
+        const currentUser = users.find((user) => user.email === email);
 
         if (!currentUser) {
             res.redirect('auth/register');
