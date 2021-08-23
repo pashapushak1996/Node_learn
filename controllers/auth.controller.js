@@ -1,10 +1,10 @@
-const users = require('../db/users');
+const userService = require('../services/user.service');
 
 module.exports = {
     login: (req, res) => {
         const { email, password } = req.body;
 
-        const currentUser = users.find((user) => user.email === email);
+        const currentUser = userService.findUserByEmail(email);
 
         if (!currentUser) {
             res.redirect('auth/register');
@@ -20,6 +20,7 @@ module.exports = {
 
         res.status(401).json('Password incorrect');
     },
+
     register: (req, res) => {
         res.json('register page');
     }

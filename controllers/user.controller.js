@@ -1,22 +1,26 @@
-const users = require('../db/users');
-const { userDataValidator } = require('../utils/validators');
+const userService = require('../services/user.service');
+const { userDataValidator } = require('../utils');
 
 module.exports = {
-    getAllUsers: (req, res) => {
+    getAllUsers: async (req, res) => {
+        const users = await userService.getUsersFromDB();
         res.json(users);
     },
-    getUserById: (req, res) => {
+
+    getUserById: async (req, res) => {
         const { user_id } = req.params;
-        const currentUser = users[user_id];
+        const currentUser = await userService.getUserById(user_id);
+
         if (!currentUser) {
             return res.status(404).json('user not found');
         }
 
         res.json(currentUser);
     },
-    createUser: (req, res) => {
+
+    createUser: async (req, res) => {
         const { email, password } = req.body;
-        const currentUser = users.find((user) => user.email === email);
+        const currentUser = await userService.findUserByEmail(email);
 
         if (currentUser) {
             res.json('User is exist');
@@ -24,52 +28,41 @@ module.exports = {
         }
 
         const isValidData = userDataValidator(email, password);
-        const lastUserId = users.pop().userId;
-
-        const createdUser = {
-            userId: lastUserId + 1,
-            email,
-            password
-        };
 
         if (isValidData) {
-            users.push(createdUser);
-            res.status(201).json(users);
+            const usersFromDb = await userService.saveUserToDB(email, password);
+            res.status(201).json(usersFromDb);
             return;
         }
 
         res.status(400).json('Email or password is incorrect');
     },
-    deleteUser: (req, res) => {
+
+    deleteUser: async (req, res) => {
         const { user_id } = req.params;
-        const selectedUser = users[user_id];
+        const selectedUser = await userService.getUserById(user_id);
 
         if (!selectedUser) {
             res.status(404).json('User not found');
             return;
         }
 
-        const filteredUsers = users.filter((user) => user.userId !== +user_id);
+        const filteredUsers = await userService.deleteUserFromDB(user_id);
 
         res.status(200).json(filteredUsers);
     },
-    updateUser: (req, res) => {
+
+    updateUser: async (req, res) => {
         const { user_id } = req.params;
 
-        const currentUser = users[+user_id];
+        const currentUser = await userService.getUserById(user_id);
 
         if (!currentUser) {
             res.status(404).json('User not found');
             return;
         }
 
-        const updatedUsers = users.map((user) => {
-            if (user.userId === +user_id) {
-                user = { ...user, ...req.body };
-                return user;
-            }
-            return user;
-        });
+        const updatedUsers = await userService.updateUserFromDB(user_id, req.body);
 
         res.status(202).json(updatedUsers);
     }
