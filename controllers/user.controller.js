@@ -66,8 +66,7 @@ module.exports = {
         await userService.setUsersToDB(filteredUsers);
 
         res.status(204);
-    }
-    ,
+    },
 
     updateUser: async (req, res) => {
         const { user_id } = req.params;
