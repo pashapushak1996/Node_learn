@@ -27,5 +27,16 @@
     "eslint-plugin-promise": "^5.1.0",
     "husky": "4.3.0",
     "lint-staged": "^11.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint",
+      "git add"
+    ]
   }
 }
