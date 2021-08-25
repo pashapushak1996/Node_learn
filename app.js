@@ -1,16 +1,19 @@
 const express = require('express');
 
 const { PORT } = require('./config/varialbles');
-const { userRouter, authRouter } = require('./routes');
 
 const app = express();
+
+app.listen(PORT, () => {
+    console.log('App listen on localhost:', PORT);
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.listen(PORT, () => {
-    console.log(`Localhost:${PORT}`);
-});
-
-app.use('/auth', authRouter);
 app.use('/users', userRouter);
+app.use('*',);
+
+const _notFoundError = (err, req, res, next) => {
+
+}
