@@ -1,18 +1,24 @@
-const fs = require('fs').promises;
-const path = require('path');
+const User = require('../dataBase/User');
 
-const { dataToJson } = require('../utils');
-
-const pathToDB = path.join(__dirname, '../', 'db', 'users.json');
-
-module.exports = {
-    getUsersFromDB: async () => {
-        const users = await fs.readFile(pathToDB);
-        return dataToJson(users);
+const userService = {
+    deleteUser: async (id) => {
+        await User.deleteOne({ _id: id });
     },
+    createUser: async (req) => {
+        const createdUser = await User.create({ ...req.body });
 
-    setUsersToDB: async (users) => {
-        const usersStringify = JSON.stringify(users);
-        await fs.writeFile(pathToDB, usersStringify);
+        return createdUser;
+    },
+    updateUser: async (id, req) => {
+        const updatedUser = await User.updateOne({ _id: id }, { ...req.body });
+
+        return updatedUser;
+    },
+    getAllUsers: async () => {
+        const users = await User.find();
+
+        return users;
     }
 };
+
+module.exports = userService;
