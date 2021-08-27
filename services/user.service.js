@@ -1,14 +1,10 @@
 const User = require('../dataBase/User');
 
 const userService = {
-    deleteUser: async (id) => {
-        await User.deleteOne({ _id: id });
-    },
-    createUser: async (body) => {
-        const createdUser = await User.create({ ...body });
+    deleteUser: (userId) => User.deleteOne({ _id: userId }),
 
-        return createdUser;
-    },
+    createUser: (body) => User.create({ ...body }),
+
     updateUser: async (userId, req) => {
         const updatedUser = await User.findOneAndUpdate(
             { _id: userId },
@@ -20,11 +16,8 @@ const userService = {
 
         return updatedUser;
     },
-    getAllUsers: async () => {
-        const users = await User.find();
 
-        return users;
-    }
+    getAllUsers: () => User.find()
 };
 
 module.exports = userService;
