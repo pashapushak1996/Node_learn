@@ -1,7 +1,7 @@
 const User = require('../dataBase/User');
 const ErrorHandler = require('../errors/ErrorHandler');
 
-const statusCodes = require('../errors/error.statusCodes');
+const statusCodes = require('../config/statusCodes');
 const userErrorMessages = require('../errors/userError.messages');
 
 const userMiddleware = {

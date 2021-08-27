@@ -1,12 +1,14 @@
 const { carService } = require('../services');
 
+const statusCodes = require('../config/statusCodes');
+
 const carController = {
     getAllCars: async (req, res, next) => {
         try {
             const cars = await carService.getAllCar();
 
             res
-                .status(200)
+                .status(statusCodes.OK)
                 .json(cars);
         } catch (e) {
             next(e);
@@ -18,7 +20,7 @@ const carController = {
             const { currentCar } = req;
 
             res
-                .status(200)
+                .status(statusCodes.OK)
                 .json(currentCar);
         } catch (e) {
             next(e);
@@ -30,7 +32,7 @@ const carController = {
             const createdCar = await carService.createCar(req.body);
 
             res
-                .status(201)
+                .status(statusCodes.CREATED)
                 .json(createdCar);
         } catch (e) {
             next(e);
@@ -43,7 +45,7 @@ const carController = {
             const updatedCar = await carService.updateCar(carId, req);
 
             res
-                .status(200)
+                .status(statusCodes.OK)
                 .json(updatedCar);
         } catch (e) {
             next(e);
@@ -57,7 +59,7 @@ const carController = {
             await carService.deleteCar(carId);
 
             res
-                .status(200)
+                .status(statusCodes.NO_CONTENT)
                 .json(`Car ${carId} is deleted`);
         } catch (e) {
             next(e);

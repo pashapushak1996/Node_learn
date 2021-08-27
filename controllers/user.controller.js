@@ -1,11 +1,15 @@
 const userService = require('../services/user.service');
 
+const statusCodes = require('../config/statusCodes');
+
 const userController = {
     getUsers: async (req, res, next) => {
         try {
             const users = await userService.getAllUsers();
 
-            res.json(users);
+            res
+                .status(statusCodes.OK)
+                .json(users);
         } catch (e) {
             next(e);
         }
@@ -16,7 +20,7 @@ const userController = {
             const { currentUser } = req;
 
             res
-                .status(200)
+                .status(statusCodes.OK)
                 .json(currentUser);
         } catch (e) {
             next(e);
@@ -27,7 +31,9 @@ const userController = {
         try {
             const createdUser = await userService.createUser(req.body);
 
-            res.json(createdUser);
+            res
+                .status(statusCodes.CREATED)
+                .json(createdUser);
         } catch (e) {
             next(e);
         }
@@ -39,7 +45,7 @@ const userController = {
             await userService.deleteUser(userId);
 
             res
-                .status(200)
+                .status(statusCodes.NO_CONTENT)
                 .json(`User ${userId} is deleted`);
         } catch (e) {
             next(e);
@@ -52,7 +58,7 @@ const userController = {
             const updatedUser = await userService.updateUser(userId, req);
 
             res
-                .status(201)
+                .status(statusCodes.OK)
                 .json(updatedUser);
         } catch (e) {
             next(e);
