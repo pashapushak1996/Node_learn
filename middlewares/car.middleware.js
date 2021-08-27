@@ -19,7 +19,7 @@ const carMiddleware = {
             next(e);
         }
     },
-    isCarDataPresent: (req, res, next) => {
+    isCarDataFill: (req, res, next) => {
         try {
             const {
                 brand,
@@ -41,14 +41,28 @@ const carMiddleware = {
     },
     isValidPrice: (req, res, next) => {
         try {
-            const {
-                price
-            } = req.body;
+            const { price } = req.body;
 
             const isValidPrice = price > 0;
 
             if (!isValidPrice) {
                 throw new ErrorHandler(200, 'Price must be greater than 0');
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    isValidYear: (req, res, next) => {
+        try {
+            const { year } = req.body;
+
+            const isValidYear = year > 1888;
+
+            if (!isValidYear) {
+                throw new ErrorHandler(200, 'Year must be greater than 1888');
             }
 
             next();

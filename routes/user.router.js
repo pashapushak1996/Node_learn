@@ -7,13 +7,19 @@ router.get('/', userController.getUsers);
 
 router.post('/',
     userMiddlewares.isValidEmail,
-    userMiddlewares.isUniqueEmail,
-    userMiddlewares.isUserDataPresent,
-    userMiddlewares.isPasswordPresent,
+    userMiddlewares.checkUniqueEmail,
+    userMiddlewares.isUserDataFill,
+    userMiddlewares.checkPassword,
     userController.createUser);
+
 router.get('/:userId', userMiddlewares.isUserPresent, userController.getUserById);
 
-router.put('/:userId', userMiddlewares.isUserPresent, userController.updateUser);
+router.put('/:userId',
+    userMiddlewares.isUserPresent,
+    userMiddlewares.isUserDataFill,
+    userMiddlewares.isValidEmail,
+    userMiddlewares.checkPassword,
+    userController.updateUser);
 
 router.delete('/:userId', userMiddlewares.isUserPresent, userController.deleteUser);
 

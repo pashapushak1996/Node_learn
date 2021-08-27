@@ -8,10 +8,21 @@ router.get('/', carController.getAllCars);
 
 router.get('/:carId', carMiddleware.isCarExist, carController.getCarById);
 
-router.post('/', carMiddleware.isCarDataPresent, carController.createCar);
+router.post('/',
+    carMiddleware.isCarDataFill,
+    carMiddleware.isValidYear,
+    carMiddleware.isValidPrice,
+    carController.createCar);
 
-router.put('/:carId', carMiddleware.isCarExist, carMiddleware.isCarDataPresent, carController.updateCar);
+router.put('/:carId',
+    carMiddleware.isCarExist,
+    carMiddleware.isCarDataFill,
+    carMiddleware.isValidPrice,
+    carMiddleware.isValidYear,
+    carController.updateCar);
 
-router.delete('/:carId', carMiddleware.isCarExist, carController.deleteCar);
+router.delete('/:carId',
+    carMiddleware.isCarExist,
+    carController.deleteCar);
 
 module.exports = router;

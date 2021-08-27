@@ -1,6 +1,9 @@
 const User = require('../dataBase/User');
 const ErrorHandler = require('../errors/ErrorHandler');
 
+const statusCodes = require('../errors/error.statusCodes');
+const userErrorMessages = require('../errors/userError.messages');
+
 const userMiddleware = {
     isUserPresent: async (req, res, next) => {
         try {
@@ -8,7 +11,7 @@ const userMiddleware = {
             const user = await User.findById(userId);
 
             if (!user) {
-                throw new ErrorHandler(404, 'Not found');
+                throw new ErrorHandler(statusCodes.NOT_FOUND, userErrorMessages.USER_NOT_FOUND);
             }
 
             req.currentUser = user;
@@ -33,7 +36,7 @@ const userMiddleware = {
             const isValidEmail = domains.includes(domain) && email.includes('@');
 
             if (!isValidEmail) {
-                throw new ErrorHandler(401, 'Wrong email');
+                throw new ErrorHandler(statusCodes.BAD_REQUEST, userErrorMessages.WRONG_EMAIL);
             }
 
             next();
@@ -41,13 +44,13 @@ const userMiddleware = {
             next(e);
         }
     },
-    isPasswordPresent: (req, res, next) => {
+    checkPassword: (req, res, next) => {
         try {
             const { password } = req.body;
             const isValidPassword = password.length >= 4;
 
             if (!isValidPassword) {
-                throw new ErrorHandler(400, 'Your password must be at least 6 characters');
+                throw new ErrorHandler(statusCodes.BAD_REQUEST, userErrorMessages.WRONG_PASSWORD_LENGTH);
             }
 
             next();
@@ -55,14 +58,14 @@ const userMiddleware = {
             next(e);
         }
     },
-    isUserDataPresent: (req, res, next) => {
+    isUserDataFill: (req, res, next) => {
         try {
             const { name, email, password, } = req.body;
 
             const isDataPresent = name && email && password;
 
             if (!isDataPresent) {
-                throw new ErrorHandler(400, 'Name, email, password is required');
+                throw new ErrorHandler(statusCodes.BAD_REQUEST, userErrorMessages.REQUIRED);
             }
 
             next();
@@ -70,13 +73,13 @@ const userMiddleware = {
             next(e);
         }
     },
-    isUniqueEmail: (req, res, next) => {
+    checkUniqueEmail: async (req, res, next) => {
         try {
             const { email } = req.body;
-            const user = User.findOne({ email });
+            const user = await User.findOne({ email });
 
-            if (!user) {
-                throw new ErrorHandler(200, 'User is exist');
+            if (user) {
+                throw new ErrorHandler(statusCodes.OK, userErrorMessages.IS_EXIST);
             }
 
             next();

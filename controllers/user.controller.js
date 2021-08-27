@@ -25,7 +25,7 @@ const userController = {
 
     createUser: async (req, res, next) => {
         try {
-            const createdUser = await userService.createUser(req);
+            const createdUser = await userService.createUser(req.body);
 
             res.json(createdUser);
         } catch (e) {
@@ -49,11 +49,11 @@ const userController = {
     updateUser: async (req, res, next) => {
         try {
             const { userId } = req.params;
-            await userService.updateUser(userId, req);
+            const updatedUser = await userService.updateUser(userId, req);
 
             res
-                .status(200)
-                .json(`User ${userId} is updated`);
+                .status(201)
+                .json(updatedUser);
         } catch (e) {
             next(e);
         }

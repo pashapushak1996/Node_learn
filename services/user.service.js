@@ -4,13 +4,19 @@ const userService = {
     deleteUser: async (id) => {
         await User.deleteOne({ _id: id });
     },
-    createUser: async (req) => {
-        const createdUser = await User.create({ ...req.body });
+    createUser: async (body) => {
+        const createdUser = await User.create({ ...body });
 
         return createdUser;
     },
-    updateUser: async (id, req) => {
-        const updatedUser = await User.updateOne({ _id: id }, { ...req.body });
+    updateUser: async (userId, req) => {
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: userId },
+            { $set: { ...req.body } },
+            {
+                new: true
+            }
+        );
 
         return updatedUser;
     },

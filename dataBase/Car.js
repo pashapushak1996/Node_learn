@@ -4,7 +4,6 @@ const CarSchema = new Schema({
     brand: {
         type: String,
         required: true,
-        unique: true,
         trim: true
     },
     model: {
