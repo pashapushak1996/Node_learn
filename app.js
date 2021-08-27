@@ -7,7 +7,7 @@ const statusCodes = require('./config/status-codes.enum');
 
 const app = express();
 
-mongoose.connect(`${MONGO_CONNECTION}node-learn`);
+mongoose.connect(`${MONGO_CONNECTION}`);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

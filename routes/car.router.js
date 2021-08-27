@@ -15,10 +15,10 @@ router.post('/',
     carController.createCar);
 
 router.put('/:carId',
-    carMiddleware.isCarExist,
     carMiddleware.isCarDataFill,
     carMiddleware.isValidPrice,
     carMiddleware.isValidYear,
+    carMiddleware.isCarExist,
     carController.updateCar);
 
 router.delete('/:carId',
