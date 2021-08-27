@@ -2,6 +2,7 @@ const { Car } = require('../dataBase');
 
 const ErrorHandler = require('../errors/ErrorHandler');
 const statusCodes = require('../config/status-codes.enum');
+const carErrorMessages = require('../config/carError.messages');
 
 const carMiddleware = {
     isCarExist: async (req, res, next) => {
@@ -10,7 +11,7 @@ const carMiddleware = {
             const car = await Car.findById(carId);
 
             if (!car) {
-                throw new ErrorHandler(statusCodes.NOT_FOUND, 'Car not found');
+                throw new ErrorHandler(statusCodes.NOT_FOUND, carErrorMessages.CAR_IS_EXIST);
             }
 
             req.currentCar = car;
@@ -33,7 +34,7 @@ const carMiddleware = {
             const isDataPresent = brand && model && year && price;
 
             if (!isDataPresent) {
-                throw new ErrorHandler(statusCodes.OK, 'Data is required');
+                throw new ErrorHandler(statusCodes.OK, carErrorMessages.REQUIRED);
             }
 
             next();
@@ -49,7 +50,7 @@ const carMiddleware = {
             const isValidPrice = price > 0;
 
             if (!isValidPrice) {
-                throw new ErrorHandler(statusCodes.OK, 'Price must be greater than 0');
+                throw new ErrorHandler(statusCodes.OK, carErrorMessages.PRICE_GTE);
             }
 
             next();
@@ -65,7 +66,7 @@ const carMiddleware = {
             const isValidYear = year > 1888;
 
             if (!isValidYear) {
-                throw new ErrorHandler(statusCodes.OK, 'Year must be greater than 1888');
+                throw new ErrorHandler(statusCodes.OK, carErrorMessages.YEAR_GTE);
             }
 
             next();
