@@ -1,15 +1,9 @@
 const Car = require('../dataBase/Car');
 
 const carService = {
-    deleteCar: async (id) => {
-        await Car.deleteOne({ _id: id });
-    },
+    deleteCar: (carId) => Car.deleteOne({ _id: carId }),
 
-    createCar: async (body) => {
-        const createdCar = await Car.create({ ...body });
-
-        return createdCar;
-    },
+    createCar: (body) => Car.create({ ...body }),
 
     updateCar: async (carId, req) => {
         const updatedCar = await Car.findOneAndUpdate(
@@ -23,11 +17,7 @@ const carService = {
         return updatedCar;
     },
 
-    getAllCar: async () => {
-        const cars = await Car.find();
-
-        return cars;
-    }
+    getAllCar: () => Car.find()
 };
 
 module.exports = carService;
