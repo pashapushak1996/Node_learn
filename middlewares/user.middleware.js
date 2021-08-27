@@ -32,6 +32,7 @@ const userMiddleware = {
                 'gov',
                 'net'
             ];
+
             const domain = email.split('.').pop();
 
             const isValidEmail = domains.includes(domain) && email.includes('@');
