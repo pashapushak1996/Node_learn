@@ -1,6 +1,6 @@
 const userService = require('../services/user.service');
 
-const statusCodes = require('../config/statusCodes');
+const statusCodes = require('../config/status-codes.enum');
 
 const userController = {
     getUsers: async (req, res, next) => {

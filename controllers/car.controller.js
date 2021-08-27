@@ -1,6 +1,6 @@
 const { carService } = require('../services');
 
-const statusCodes = require('../config/statusCodes');
+const statusCodes = require('../config/status-codes.enum');
 
 const carController = {
     getAllCars: async (req, res, next) => {

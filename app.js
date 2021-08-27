@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const { PORT, MONGO_CONNECTION } = require('./config/varialbles');
 const { userRouter, carRouter } = require('./routes');
-const statusCodes = require('./config/statusCodes');
+const statusCodes = require('./config/status-codes.enum');
 
 const app = express();
 

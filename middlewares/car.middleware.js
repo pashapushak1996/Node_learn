@@ -1,7 +1,7 @@
 const { Car } = require('../dataBase');
 
 const ErrorHandler = require('../errors/ErrorHandler');
-const statusCodes = require('../config/statusCodes');
+const statusCodes = require('../config/status-codes.enum');
 
 const carMiddleware = {
     isCarExist: async (req, res, next) => {
