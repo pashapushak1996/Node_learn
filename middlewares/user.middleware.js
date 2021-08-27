@@ -21,6 +21,7 @@ const userMiddleware = {
             next(e);
         }
     },
+
     isValidEmail: (req, res, next) => {
         try {
             const { email } = req.body;
@@ -44,6 +45,7 @@ const userMiddleware = {
             next(e);
         }
     },
+
     checkPassword: (req, res, next) => {
         try {
             const { password } = req.body;
@@ -58,6 +60,7 @@ const userMiddleware = {
             next(e);
         }
     },
+
     isUserDataFill: (req, res, next) => {
         try {
             const { name, email, password, } = req.body;
@@ -73,6 +76,7 @@ const userMiddleware = {
             next(e);
         }
     },
+
     checkUniqueEmail: async (req, res, next) => {
         try {
             const { email } = req.body;
