@@ -1,6 +1,6 @@
 const { User } = require('../dataBase');
 const { ErrorHandler, errorMessages } = require('../error');
-const { statusCodesEnum } = require('../constants/enum');
+const { statusCodesEnum } = require('../constants');
 const { userValidator } = require('../validators');
 
 const userMiddleware = {
