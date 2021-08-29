@@ -1,6 +1,6 @@
 const { userDataNormalizator } = require('../util/userDataNormalizator');
-const { userRegEx } = require('../constants/regEx');
-const { statusCodesEnum } = require('../constants/enum');
+const { regExpEnum } = require('../constants');
+const { statusCodesEnum } = require('../constants');
 const { User } = require('../dataBase');
 const { passwordService } = require('../service');
 
@@ -9,7 +9,7 @@ const userController = {
         try {
             const { email } = req.query;
 
-            const isTrueEmail = userRegEx.EMAIL_REGEX.test(email);
+            const isTrueEmail = regExpEnum.EMAIL_REGEX.test(email);
 
             if (isTrueEmail) {
                 const user = await User.findOne({ email }).select('-__v');
