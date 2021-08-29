@@ -6,9 +6,11 @@ const { userValidator } = require('../validators');
 const userMiddleware = {
     isUserPresent: async (req, res, next) => {
         try {
-            const { user_id } = req.params;
+            const { params: { user_id }, body: { email } } = req;
 
-            const currentUser = await User.findById({ _id: user_id }).lean();
+            const propToFind = email ? { email } : { _id: user_id };
+
+            const currentUser = await User.findOne(propToFind).lean();
 
             if (!currentUser) {
                 throw new ErrorHandler(statusCodesEnum.NOT_FOUND, errorMessages.NOT_FOUND_USER);
@@ -37,6 +39,7 @@ const userMiddleware = {
             next(e);
         }
     },
+
     checkCreateUserData: (req, res, next) => {
         try {
             const { error } = userValidator.createValidator.validate(req.body);
@@ -49,6 +52,7 @@ const userMiddleware = {
             next(e);
         }
     },
+
     checkUpdateUserData: (req, res, next) => {
         try {
             const { error } = userValidator.updateValidator.validate(req.body);
@@ -61,7 +65,7 @@ const userMiddleware = {
         } catch (e) {
             next(e);
         }
-    }
+    },
 };
 
 module.exports = userMiddleware;

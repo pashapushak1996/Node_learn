@@ -6,7 +6,7 @@ const { passwordService } = require('../service');
 const userController = {
     getAllUsers: async (req, res, next) => {
         try {
-            const users = await User.find();
+            const users = await User.find().select('-password -__v');
 
             res.json(users);
         } catch (e) {
@@ -46,11 +46,11 @@ const userController = {
 
     deleteUser: async (req, res, next) => {
         try {
-            const { params: { user_id }, currentUser: { email } } = req;
+            const { user_id } = req.params;
 
             await User.findByIdAndDelete({ _id: user_id });
 
-            res.status(statusCodesEnum.NO_CONTENT).json(`User ${email} deleted`);
+            res.status(statusCodesEnum.NO_CONTENT);
         } catch (e) {
             next(e);
         }

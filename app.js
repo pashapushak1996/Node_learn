@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { authRouter } = require('./router');
 
 const { userRouter } = require('./router');
 const { variables, statusCodesEnum } = require('./config');
@@ -15,6 +16,7 @@ app.listen(variables.PORT, () => {
     console.log(`App listen on  localhost ${variables.PORT}`);
 });
 
+app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('*', _notFoundErrorHandler);
 app.use(_mainErrorHandler);
