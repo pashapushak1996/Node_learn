@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const { errorMessages } = require('./error');
 const { userRouter, authRouter } = require('./router');
 const { variables } = require('./config');
-const { statusCodesEnum } = require('./constants/enum');
+const { statusCodesEnum } = require('./constants');
 
 mongoose.connect(variables.MONGO_CONNECTION);
 

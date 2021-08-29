@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-const { statusCodesEnum } = require('../constants/enum');
+const { statusCodesEnum } = require('../constants');
 const { ErrorHandler, errorMessages } = require('../error');
 
 module.exports = {
