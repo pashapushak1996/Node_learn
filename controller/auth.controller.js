@@ -15,7 +15,7 @@ const authController = {
 
             await passwordService.comparePassword(password, currentUser.password);
 
-            res.json('User logged');
+            res.redirect(`/users?=${currentUser.email}`);
         } catch (e) {
             next(e);
         }

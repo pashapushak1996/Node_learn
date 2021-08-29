@@ -6,17 +6,15 @@ const { userValidator } = require('../validators');
 const userMiddleware = {
     isUserPresent: async (req, res, next) => {
         try {
-            const { params: { user_id }, body: { email } } = req;
+            const { user_id } = req;
 
-            const propToFind = email ? { email } : { _id: user_id };
-
-            const currentUser = await User.findOne(propToFind).lean();
+            const currentUser = await User.findOne({ _id: user_id });
 
             if (!currentUser) {
                 throw new ErrorHandler(statusCodesEnum.NOT_FOUND, errorMessages.NOT_FOUND_USER);
             }
 
-            req.currentUser = currentUser;
+            req.currentUser = currentUser.toJSON();
 
             next();
         } catch (e) {
