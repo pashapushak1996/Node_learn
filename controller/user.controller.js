@@ -61,7 +61,7 @@ const userController = {
 
             await User.findByIdAndDelete({ _id: user_id });
 
-            res.status(statusCodesEnum.NO_CONTENT);
+            res.status(statusCodesEnum.NO_CONTENT).json(`User ${user_id} is deleted`);
         } catch (e) {
             next(e);
         }
