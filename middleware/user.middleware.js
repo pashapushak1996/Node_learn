@@ -6,7 +6,7 @@ const { userValidator } = require('../validators');
 const userMiddleware = {
     isUserPresent: async (req, res, next) => {
         try {
-            const { user_id } = req;
+            const { user_id } = req.params;
 
             const currentUser = await User.findOne({ _id: user_id }).select('+password');
 
