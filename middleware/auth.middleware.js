@@ -1,6 +1,5 @@
 const { User } = require('../dataBase');
-const { ErrorHandler } = require('../error');
-const { errorMessages } = require('../error');
+const { ErrorHandler, errorMessages } = require('../error');
 const { statusCodesEnum } = require('../constants');
 const { authValidator } = require('../validators');
 

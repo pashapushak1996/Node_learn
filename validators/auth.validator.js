@@ -1,4 +1,5 @@
 const Joi = require('joi');
+
 const { regExpEnum } = require('../constants');
 
 const loginDataValidator = Joi.object({
