@@ -1,7 +1,7 @@
 const { User } = require('../dataBase');
 const { ErrorHandler } = require('../error');
 const { errorMessages } = require('../error');
-const { statusCodesEnum } = require('../config');
+const { statusCodesEnum } = require('../constants/enum');
 const { authValidator } = require('../validators');
 
 const authMiddleware = {

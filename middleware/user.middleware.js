@@ -1,6 +1,6 @@
 const { User } = require('../dataBase');
 const { ErrorHandler, errorMessages } = require('../error');
-const { statusCodesEnum } = require('../config');
+const { statusCodesEnum } = require('../constants/enum');
 const { userValidator } = require('../validators');
 
 const userMiddleware = {
@@ -8,7 +8,7 @@ const userMiddleware = {
         try {
             const { user_id } = req;
 
-            const currentUser = await User.findOne({ _id: user_id });
+            const currentUser = await User.findOne({ _id: user_id }).select('+password');
 
             if (!currentUser) {
                 throw new ErrorHandler(statusCodesEnum.NOT_FOUND, errorMessages.NOT_FOUND_USER);

@@ -1,6 +1,6 @@
 const { userDataNormalizator } = require('../util/userDataNormalizator');
-const { constants } = require('../config');
-const { statusCodesEnum } = require('../config');
+const { userRegEx } = require('../constants/regEx');
+const { statusCodesEnum } = require('../constants/enum');
 const { User } = require('../dataBase');
 const { passwordService } = require('../service');
 
@@ -9,15 +9,15 @@ const userController = {
         try {
             const { email } = req.query;
 
-            const isTrueEmail = constants.EMAIL_REGEX.test(email);
+            const isTrueEmail = userRegEx.EMAIL_REGEX.test(email);
 
             if (isTrueEmail) {
-                const user = await User.findOne({ email }).select('-password -__v');
+                const user = await User.findOne({ email }).select('-__v');
                 res.json(user);
                 return;
             }
 
-            const users = await User.find().select('-password -__v');
+            const users = await User.find().select('-__v');
 
             res.json(users);
         } catch (e) {
@@ -25,18 +25,8 @@ const userController = {
         }
     },
 
-    getUserById: async (req, res, next) => {
+    getUserById: (req, res, next) => {
         try {
-            const { email } = req.query;
-
-            if (email) {
-                const user = await User.findOne({ email }).select('-password');
-
-                if (user) {
-                    res.json(user);
-                }
-            }
-
             const { currentUser } = req;
 
             const normalizedUser = userDataNormalizator(currentUser);

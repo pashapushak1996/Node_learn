@@ -1,6 +1,6 @@
 const { ErrorHandler, errorMessages } = require('../error');
 const { passwordService } = require('../service');
-const { statusCodesEnum } = require('../config');
+const { statusCodesEnum } = require('../constants/enum');
 
 const authController = {
     login: async (req, res, next) => {
@@ -15,7 +15,7 @@ const authController = {
 
             await passwordService.comparePassword(password, currentUser.password);
 
-            res.redirect(`/users?=${currentUser.email}`);
+            res.redirect(`/users?email=${currentUser.email}`);
         } catch (e) {
             next(e);
         }
