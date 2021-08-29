@@ -21,7 +21,7 @@ const authMiddleware = {
     isEmailExist: async (req, res, next) => {
         try {
             const { email } = req.body;
-            const user = await User.findOne({ email });
+            const user = await User.findOne({ email }).select('+password');
 
             if (!user) {
                 throw new ErrorHandler(statusCodesEnum.NOT_FOUND, errorMessages.EMAIL_ALREADY_EXIST);
