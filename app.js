@@ -1,12 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
+require('dotenv').config();
+
 const { errorMessages } = require('./error');
 const { userRouter, authRouter, carRouter } = require('./routes');
 const { variables } = require('./config');
 const { statusCodesEnum } = require('./constants');
-
-require('dotenv').config();
 
 mongoose.connect(variables.DB_CONNECTION);
 
