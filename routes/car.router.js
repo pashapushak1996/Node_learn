@@ -3,7 +3,9 @@ const router = require('express').Router();
 const { carController } = require('../controllers');
 const { carMiddleware } = require('../middlewares');
 
-router.get('/', carMiddleware.validateQueryParam, carController.getAllCars);
+router.get('/',
+    carMiddleware.validateQueryParam,
+    carController.getAllCars);
 
 router.post('/',
     carMiddleware.validateCreateBody,

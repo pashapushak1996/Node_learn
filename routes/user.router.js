@@ -15,8 +15,10 @@ router.put('/:user_id',
     userMiddleware.getUserByDynamicParams('email'),
     userController.updateUser);
 
-router.get('/:user_id', userMiddleware.getUserByDynamicParams('user_id', 'params', '_id'), userController.getUserById);
+router.get('/:user_id',
+    userMiddleware.getUserByDynamicParams('user_id', 'params', '_id'), userController.getUserById);
 
-router.delete('/:user_id', userMiddleware.getUserByDynamicParams('user_id', 'params', '_id'), userController.deleteUser);
+router.delete('/:user_id',
+    userMiddleware.getUserByDynamicParams('user_id', 'params', '_id'), userController.deleteUser);
 
 module.exports = router;
