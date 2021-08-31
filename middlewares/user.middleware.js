@@ -1,27 +1,9 @@
-const { User } = require('../dataBase');
 const { ErrorHandler, errorMessages } = require('../error');
 const { statusCodesEnum } = require('../constants');
+const { User } = require('../dataBase');
 const { userValidator } = require('../validators');
 
 const userMiddleware = {
-    isUserPresent: async (req, res, next) => {
-        try {
-            const { user_id } = req.params;
-
-            const currentUser = await User.findOne({ _id: user_id }).select('+password');
-
-            if (!currentUser) {
-                throw new ErrorHandler(statusCodesEnum.NOT_FOUND, errorMessages.NOT_FOUND_USER);
-            }
-
-            req.currentUser = currentUser.toJSON();
-
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
-
     checkUniqueEmail: async (req, res, next) => {
         try {
             const { email } = req.body;
@@ -58,6 +40,26 @@ const userMiddleware = {
             if (error) {
                 throw new ErrorHandler(statusCodesEnum.BAD_REQUEST, error.details[0].message);
             }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    getUserByDynamicParams: (paramName, searchIn = 'body', dbFiled = paramName) => async (req, res, next) => {
+        try {
+            const value = req[searchIn][paramName];
+
+            const currentUser = await User
+                .findOne({ [dbFiled]: value })
+                .lean();
+
+            if (!currentUser) {
+                throw new ErrorHandler(statusCodesEnum.NOT_FOUND, errorMessages.NOT_FOUND_USER);
+            }
+
+            req.currentUser = currentUser;
 
             next();
         } catch (e) {

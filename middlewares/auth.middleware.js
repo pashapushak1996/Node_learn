@@ -23,7 +23,7 @@ const authMiddleware = {
             const user = await User.findOne({ email }).select('+password');
 
             if (!user) {
-                throw new ErrorHandler(statusCodesEnum.NOT_FOUND, errorMessages.EMAIL_ALREADY_EXIST);
+                throw new ErrorHandler(statusCodesEnum.NOT_FOUND, errorMessages.NOT_FOUND_USER);
             }
 
             req.currentUser = user;

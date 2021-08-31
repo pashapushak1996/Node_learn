@@ -2,11 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const { errorMessages } = require('./error');
-const { userRouter, authRouter } = require('./router');
+const { userRouter, authRouter, carRouter } = require('./routes');
 const { variables } = require('./config');
 const { statusCodesEnum } = require('./constants');
 
-mongoose.connect(variables.MONGO_CONNECTION);
+require('dotenv').config();
+
+mongoose.connect(variables.DB_CONNECTION);
 
 const app = express();
 
@@ -18,6 +20,7 @@ app.listen(variables.PORT, () => {
 });
 
 app.use('/auth', authRouter);
+app.use('/cars', carRouter);
 app.use('/users', userRouter);
 app.use('*', _notFoundErrorHandler);
 app.use(_mainErrorHandler);

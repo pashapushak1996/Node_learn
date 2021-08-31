@@ -1,8 +1,8 @@
-const { userDataNormalizator } = require('../util/userDataNormalizator');
+const { passwordService } = require('../services');
 const { regExpEnum } = require('../constants');
 const { statusCodesEnum } = require('../constants');
 const { User } = require('../dataBase');
-const { passwordService } = require('../service');
+const { userDataNormalizator } = require('../utils/userDataNormalizator');
 
 const userController = {
     getAllUsers: async (req, res, next) => {

@@ -18,9 +18,11 @@
   "homepage": "https://github.com/pashapushak1996/Node_learn#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "joi": "^17.4.2",
-    "mongoose": "^6.0.2"
+    "mongoose": "^6.0.2",
+    "pm2": "^5.1.1"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
