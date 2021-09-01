@@ -1,14 +1,14 @@
-module.exports = {
-    userDataNormalizator: (userObj) => {
-        const fields = [
-            'password',
-            '__v'
-        ];
+const userDataNormalizator = (userObj) => {
+    const fields = [
+        'password',
+        '__v'
+    ];
 
-        fields.forEach((field) => {
-            delete userObj[field];
-        });
+    fields.forEach((field) => {
+        delete userObj[field];
+    });
 
-        return userObj;
-    },
+    return userObj;
 };
+
+module.exports = userDataNormalizator;

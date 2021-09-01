@@ -1,5 +1,5 @@
 const { ErrorHandler, errorMessages } = require('../error');
-const { statusCodesEnum } = require('../constants');
+const { statusCodesEnum, middlewareParamEnum } = require('../constants');
 const { User } = require('../dataBase');
 const { userValidator } = require('../validators');
 
@@ -47,7 +47,11 @@ const userMiddleware = {
         }
     },
 
-    getUserByDynamicParams: (paramName, searchIn = 'body', dbFiled = paramName) => async (req, res, next) => {
+    getUserByDynamicParams: (
+        paramName,
+        searchIn = middlewareParamEnum.REQ_BODY,
+        dbFiled = paramName
+    ) => async (req, res, next) => {
         try {
             const value = req[searchIn][paramName];
 

@@ -1,5 +1,6 @@
 const router = require('express').Router();
 
+const { middlewareParamEnum } = require('../constants');
 const { userController } = require('../controllers');
 const { userMiddleware } = require('../middlewares');
 
@@ -12,13 +13,25 @@ router.post('/',
 
 router.put('/:user_id',
     userMiddleware.checkUpdateUserData,
-    userMiddleware.getUserByDynamicParams('email'),
+    userMiddleware.getUserByDynamicParams(
+        middlewareParamEnum.USER_ID,
+        middlewareParamEnum.REQ_PARAMS,
+        middlewareParamEnum.DB_ID
+    ),
     userController.updateUser);
 
 router.get('/:user_id',
-    userMiddleware.getUserByDynamicParams('user_id', 'params', '_id'), userController.getUserById);
+    userMiddleware.getUserByDynamicParams(
+        middlewareParamEnum.USER_ID,
+        middlewareParamEnum.REQ_PARAMS,
+        middlewareParamEnum.DB_ID
+    ), userController.getUserById);
 
 router.delete('/:user_id',
-    userMiddleware.getUserByDynamicParams('user_id', 'params', '_id'), userController.deleteUser);
+    userMiddleware.getUserByDynamicParams(
+        middlewareParamEnum.USER_ID,
+        middlewareParamEnum.REQ_PARAMS,
+        middlewareParamEnum.DB_ID
+    ), userController.deleteUser);
 
 module.exports = router;
