@@ -1,7 +1,7 @@
 const { Car } = require('../dataBase');
 const { carValidator } = require('../validators');
 const { ErrorHandler, errorMessages } = require('../error');
-const { statusCodesEnum } = require('../constants');
+const { statusCodesEnum, middlewareParamEnum } = require('../constants');
 
 const carMiddleware = {
     validateCreateBody: async (req, res, next) => {
@@ -48,7 +48,7 @@ const carMiddleware = {
 
     getCarByDynamicParams: (
         paramName,
-        searchIn = 'body',
+        searchIn = middlewareParamEnum.REQ_BODY,
         dbFiled = paramName
     ) => async (req, res, next) => {
         try {
