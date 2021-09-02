@@ -35,6 +35,7 @@ const userMiddleware = {
     checkCreateUserData: (req, res, next) => {
         try {
             const { error } = userValidator.createValidator.validate(req.body);
+
             if (error) {
                 throw new ErrorHandler(statusCodesEnum.BAD_REQUEST, error.details[0].message);
             }
