@@ -1,6 +1,7 @@
-const { User } = require('../dataBase');
+const { authService } = require('../services');
+const { statusCodesEnum, middlewareParamEnum } = require('../constants');
+const { OAuth } = require('../dataBase');
 const { ErrorHandler, errorMessages } = require('../error');
-const { statusCodesEnum } = require('../constants');
 const { authValidator } = require('../validators');
 
 const authMiddleware = {
@@ -17,16 +18,48 @@ const authMiddleware = {
             next(e);
         }
     },
-    isEmailExist: async (req, res, next) => {
-        try {
-            const { email } = req.body;
-            const user = await User.findOne({ email }).select('+password');
 
-            if (!user) {
-                throw new ErrorHandler(statusCodesEnum.NOT_FOUND, errorMessages.NOT_FOUND_USER);
+    checkAccessToken: async (req, res, next) => {
+        try {
+            const access_token = req.get(middlewareParamEnum.AUTHORIZATION);
+
+            if (!access_token) {
+                throw new ErrorHandler(statusCodesEnum.UNAUTHORIZED, errorMessages.NO_TOKEN);
             }
 
-            req.currentUser = user;
+            await authService.verifyToken(access_token);
+
+            const tokenFromDB = await OAuth.findOne({ access_token }).populate('user');
+
+            if (!tokenFromDB) {
+                throw new ErrorHandler(statusCodesEnum.UNAUTHORIZED, errorMessages.NOT_VALID_TOKEN);
+            }
+
+            req.loggedUser = tokenFromDB.user;
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    checkRefreshToken: async (req, res, next) => {
+        try {
+            const refresh_token = req.get(middlewareParamEnum.AUTHORIZATION);
+
+            if (!refresh_token) {
+                throw new ErrorHandler(statusCodesEnum.UNAUTHORIZED, errorMessages.WRONG_TOKEN);
+            }
+
+            await authService.verifyToken(refresh_token, 'refresh');
+
+            const tokenFromDB = await OAuth.findOne({ refresh_token }).populate('user');
+
+            if (!tokenFromDB) {
+                throw new ErrorHandler(statusCodesEnum.UNAUTHORIZED, errorMessages.WRONG_TOKEN);
+            }
+
+            req.loggedUser = tokenFromDB.user;
 
             next();
         } catch (e) {

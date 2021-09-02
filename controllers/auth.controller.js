@@ -1,4 +1,7 @@
-const { passwordService } = require('../services');
+const { middlewareParamEnum } = require('../constants');
+const { OAuth } = require('../dataBase');
+const { passwordService, authService } = require('../services');
+const { userDataNormalizator } = require('../utils');
 
 const authController = {
     login: async (req, res, next) => {
@@ -7,11 +10,42 @@ const authController = {
 
             await passwordService.comparePassword(password, currentUser.password);
 
-            res.redirect(`/users?email=${currentUser.email}`);
+            const tokenPair = authService.generateTokenPair();
+
+            await OAuth.create({ ...tokenPair, user: currentUser._id });
+
+            res.json({ ...tokenPair, user: userDataNormalizator(currentUser) });
         } catch (e) {
             next(e);
         }
-    }
+    },
+
+    logout: async (req, res, next) => {
+        try {
+            const access_token = req.get(middlewareParamEnum.AUTHORIZATION);
+
+            await OAuth.deleteOne({ access_token });
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    refresh: async (req, res, next) => {
+        try {
+            const user = req.loggedUser;
+            const refresh_token = req.get(middlewareParamEnum.AUTHORIZATION);
+
+            await OAuth.deleteOne({ refresh_token });
+
+            const tokenPair = authService.generateTokenPair();
+
+            await OAuth.create({ ...tokenPair, user: user._id });
+
+            res.json({ ...tokenPair, user });
+        } catch (e) {
+            next(e);
+        }
+    },
 };
 
 module.exports = authController;

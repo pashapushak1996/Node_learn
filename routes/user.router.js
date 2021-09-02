@@ -1,23 +1,27 @@
 const router = require('express').Router();
 
-const { middlewareParamEnum } = require('../constants');
+const { middlewareParamEnum, userRolesEnum } = require('../constants');
 const { userController } = require('../controllers');
-const { userMiddleware } = require('../middlewares');
+const { userMiddleware, authMiddleware } = require('../middlewares');
 
 router.get('/', userController.getAllUsers);
 
 router.post('/',
     userMiddleware.checkCreateUserData,
-    userMiddleware.checkUniqueEmail,
+    userMiddleware.getUserByDynamicParams('email'),
+    userMiddleware.throwIfUserExist,
     userController.createUser);
 
 router.put('/:user_id',
     userMiddleware.checkUpdateUserData,
+    authMiddleware.checkAccessToken,
     userMiddleware.getUserByDynamicParams(
         middlewareParamEnum.USER_ID,
         middlewareParamEnum.REQ_PARAMS,
         middlewareParamEnum.DB_ID
     ),
+    userMiddleware.throwIfUserNotExist,
+    userMiddleware.checkUserRole(),
     userController.updateUser);
 
 router.get('/:user_id',
@@ -25,13 +29,19 @@ router.get('/:user_id',
         middlewareParamEnum.USER_ID,
         middlewareParamEnum.REQ_PARAMS,
         middlewareParamEnum.DB_ID
-    ), userController.getUserById);
+    ),
+    userMiddleware.throwIfUserNotExist,
+    userController.getUserById);
 
 router.delete('/:user_id',
+    authMiddleware.checkAccessToken,
     userMiddleware.getUserByDynamicParams(
         middlewareParamEnum.USER_ID,
         middlewareParamEnum.REQ_PARAMS,
         middlewareParamEnum.DB_ID
-    ), userController.deleteUser);
+    ),
+    userMiddleware.checkUserRole([userRolesEnum.ADMIN]),
+    userMiddleware.throwIfUserNotExist,
+    userController.deleteUser);
 
 module.exports = router;

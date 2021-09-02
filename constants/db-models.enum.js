@@ -1,4 +1,5 @@
 module.exports = {
     CAR: 'car',
-    USER: 'user'
+    USER: 'user',
+    OAUTH: 'oauth',
 };

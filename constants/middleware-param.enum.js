@@ -3,5 +3,6 @@ module.exports = {
     REQ_BODY: 'body',
     REQ_PARAMS: 'params',
     DB_ID: '_id',
-    USER_ID: 'user_id'
+    USER_ID: 'user_id',
+    AUTHORIZATION: 'Authorization'
 };

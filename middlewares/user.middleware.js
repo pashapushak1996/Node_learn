@@ -4,14 +4,26 @@ const { User } = require('../dataBase');
 const { userValidator } = require('../validators');
 
 const userMiddleware = {
-    checkUniqueEmail: async (req, res, next) => {
+    throwIfUserExist: (req, res, next) => {
         try {
-            const { email } = req.body;
+            const { currentUser } = req;
 
-            const user = await User.findOne({ email });
+            if (currentUser) {
+                throw new ErrorHandler(statusCodesEnum.CONFLICT, errorMessages.USER_ALREADY_EXIST);
+            }
 
-            if (user) {
-                throw new ErrorHandler(statusCodesEnum.CONFLICT, errorMessages.EMAIL_ALREADY_EXIST);
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    throwIfUserNotExist: (req, res, next) => {
+        try {
+            const { currentUser } = req;
+
+            if (!currentUser) {
+                throw new ErrorHandler(statusCodesEnum.CONFLICT, errorMessages.NOT_FOUND_USER);
             }
 
             next();
@@ -57,11 +69,8 @@ const userMiddleware = {
 
             const currentUser = await User
                 .findOne({ [dbFiled]: value })
-                .lean();
-
-            if (!currentUser) {
-                throw new ErrorHandler(statusCodesEnum.NOT_FOUND, errorMessages.NOT_FOUND_USER);
-            }
+                .lean()
+                .select('+password');
 
             req.currentUser = currentUser;
 
@@ -70,6 +79,24 @@ const userMiddleware = {
             next(e);
         }
     },
+
+    checkUserRole: (roles = []) => (req, res, next) => {
+        try {
+            const { loggedUser, currentUser } = req;
+
+            const isLoggedUser = loggedUser._id.toString() === currentUser._id.toString();
+
+            if (isLoggedUser || roles.includes(currentUser.role)) {
+                next();
+                return;
+            }
+
+            throw new ErrorHandler(statusCodesEnum.FORBIDDEN, errorMessages.ACCESS_DENIED);
+        } catch (e) {
+            next(e);
+        }
+    },
+
 };
 
 module.exports = userMiddleware;
