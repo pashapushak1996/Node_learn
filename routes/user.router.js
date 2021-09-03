@@ -22,7 +22,7 @@ router.put('/:user_id',
         middlewareParamEnum.DB_ID
     ),
     userMiddleware.throwIfUserNotExist,
-    userMiddleware.checkUserRole(),
+    userMiddleware.checkIsLoggedUser,
     userController.updateUser);
 
 router.get('/:user_id',
@@ -41,8 +41,8 @@ router.delete('/:user_id',
         middlewareParamEnum.REQ_PARAMS,
         middlewareParamEnum.DB_ID
     ),
-    userMiddleware.checkUserRole([userRolesEnum.ADMIN]),
     userMiddleware.throwIfUserNotExist,
+    userMiddleware.checkUserRole[userRolesEnum.ADMIN],
     userController.deleteUser);
 
 module.exports = router;

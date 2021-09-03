@@ -51,8 +51,23 @@ const userMiddleware = {
             next(e);
         }
     },
+    checkIsLoggedUser: (req, res, next) => {
+        try {
+            const { loggedUser, params: { user_id } } = req;
 
-    checkUserRole: (roles = []) => (req, res, next) => {
+            const isLoggedUser = loggedUser._id.toString() === user_id;
+
+            if (!isLoggedUser) {
+                throw new ErrorHandler(statusCodesEnum.FORBIDDEN, errorMessages.ACCESS_DENIED);
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    checkUserRole: (roles = [],) => (req, res, next) => {
         try {
             const { loggedUser, params: { user_id } } = req;
 
@@ -69,6 +84,8 @@ const userMiddleware = {
             if (!roles.includes(loggedUser.role)) {
                 throw new ErrorHandler(statusCodesEnum.FORBIDDEN, errorMessages.ACCESS_DENIED);
             }
+
+            next();
         } catch (e) {
             next(e);
         }
