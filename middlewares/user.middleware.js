@@ -1,7 +1,6 @@
 const { ErrorHandler, errorMessages } = require('../error');
 const { statusCodesEnum, middlewareParamEnum } = require('../constants');
 const { User } = require('../dataBase');
-const { userValidator } = require('../validators');
 
 const userMiddleware = {
     throwIfUserExist: (req, res, next) => {
@@ -24,34 +23,6 @@ const userMiddleware = {
 
             if (!currentUser) {
                 throw new ErrorHandler(statusCodesEnum.CONFLICT, errorMessages.NOT_FOUND_USER);
-            }
-
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
-
-    checkCreateUserData: (req, res, next) => {
-        try {
-            const { error } = userValidator.createValidator.validate(req.body);
-
-            if (error) {
-                throw new ErrorHandler(statusCodesEnum.BAD_REQUEST, error.details[0].message);
-            }
-
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
-
-    checkUpdateUserData: (req, res, next) => {
-        try {
-            const { error } = userValidator.updateValidator.validate(req.body);
-
-            if (error) {
-                throw new ErrorHandler(statusCodesEnum.BAD_REQUEST, error.details[0].message);
             }
 
             next();

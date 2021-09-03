@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 
+const { middlewareParamEnum } = require('../constants');
+
 const {
     variables: {
         ACCESS_SECRET_KEY,
@@ -22,9 +24,9 @@ const generateTokenPair = () => {
     };
 };
 
-const verifyToken = async (token, tokenType = 'access') => {
+const verifyToken = async (token, tokenType = middlewareParamEnum.ACCESS) => {
     try {
-        const secretWord = tokenType === 'access' ? ACCESS_SECRET_KEY : REFRESH_SECRET_KEY;
+        const secretWord = tokenType === middlewareParamEnum.ACCESS ? ACCESS_SECRET_KEY : REFRESH_SECRET_KEY;
 
         await promisifyVerifyToken(token, secretWord);
     } catch (e) {

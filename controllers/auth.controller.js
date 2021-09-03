@@ -26,7 +26,7 @@ const authController = {
 
             await OAuth.deleteOne({ access_token });
 
-            res.status(statusCodesEnum.NO_CONTENT);
+            res.sendStatus(statusCodesEnum.NO_CONTENT);
         } catch (e) {
             next(e);
         }

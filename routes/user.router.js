@@ -2,18 +2,19 @@ const router = require('express').Router();
 
 const { middlewareParamEnum, userRolesEnum } = require('../constants');
 const { userController } = require('../controllers');
-const { userMiddleware, authMiddleware } = require('../middlewares');
+const { userMiddleware, authMiddleware, globalMiddleware } = require('../middlewares');
+const { userValidator } = require('../validators');
 
 router.get('/', userController.getAllUsers);
 
 router.post('/',
-    userMiddleware.checkCreateUserData,
-    userMiddleware.getUserByDynamicParams('email'),
+    globalMiddleware.dynamicValidatorMiddleware(userValidator.createValidator),
+    userMiddleware.getUserByDynamicParams(middlewareParamEnum.EMAIL),
     userMiddleware.throwIfUserExist,
     userController.createUser);
 
 router.put('/:user_id',
-    userMiddleware.checkUpdateUserData,
+    globalMiddleware.dynamicValidatorMiddleware(userValidator.updateValidator),
     authMiddleware.checkAccessToken,
     userMiddleware.getUserByDynamicParams(
         middlewareParamEnum.USER_ID,

@@ -1,11 +1,13 @@
 const router = require('express').Router();
 
 const { authController } = require('../controllers');
-const { authMiddleware, userMiddleware } = require('../middlewares');
+const { middlewareParamEnum } = require('../constants');
+const { authMiddleware, userMiddleware, globalMiddleware } = require('../middlewares');
+const { authValidator } = require('../validators');
 
 router.post('/',
-    authMiddleware.checkLoginUserData,
-    userMiddleware.getUserByDynamicParams('email'),
+    globalMiddleware.dynamicValidatorMiddleware(authValidator.loginDataValidator),
+    userMiddleware.getUserByDynamicParams(middlewareParamEnum.EMAIL),
     userMiddleware.throwIfUserNotExist,
     authController.login);
 

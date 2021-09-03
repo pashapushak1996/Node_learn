@@ -1,15 +1,16 @@
 const router = require('express').Router();
 
 const { carController } = require('../controllers');
-const { carMiddleware } = require('../middlewares');
+const { carMiddleware, globalMiddleware } = require('../middlewares');
 const { middlewareParamEnum } = require('../constants');
+const { carValidator } = require('../validators');
 
 router.get('/',
-    carMiddleware.validateQueryParam,
+    globalMiddleware.dynamicValidatorMiddleware(carValidator.findAndCreateCarValidator, middlewareParamEnum.REQ_QUERY, true),
     carController.getAllCars);
 
 router.post('/',
-    carMiddleware.validateCreateBody,
+    globalMiddleware.dynamicValidatorMiddleware(carValidator.findAndCreateCarValidator),
     carController.createCar);
 
 router.get('/:car_id',
@@ -21,7 +22,7 @@ router.get('/:car_id',
     carController.getSingleCar);
 
 router.put('/:car_id',
-    carMiddleware.validateUpdateBody,
+    globalMiddleware.dynamicValidatorMiddleware(carValidator.updateCarValidator),
     carMiddleware.getCarByDynamicParams(
         middlewareParamEnum.CAR_ID,
         middlewareParamEnum.REQ_PARAMS,

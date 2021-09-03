@@ -1,24 +1,9 @@
 const { authService } = require('../services');
-const { statusCodesEnum, middlewareParamEnum } = require('../constants');
+const { statusCodesEnum, middlewareParamEnum, dbModelsEnum } = require('../constants');
 const { OAuth } = require('../dataBase');
 const { ErrorHandler, errorMessages } = require('../error');
-const { authValidator } = require('../validators');
 
 const authMiddleware = {
-    checkLoginUserData: (req, res, next) => {
-        try {
-            const { error } = authValidator.loginDataValidator.validate(req.body);
-
-            if (error) {
-                throw new ErrorHandler(statusCodesEnum.BAD_REQUEST, errorMessages.REQ_BODY_IS_WRONG);
-            }
-
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
-
     checkAccessToken: async (req, res, next) => {
         try {
             const access_token = req.get(middlewareParamEnum.AUTHORIZATION);
@@ -29,7 +14,7 @@ const authMiddleware = {
 
             await authService.verifyToken(access_token);
 
-            const tokenFromDB = await OAuth.findOne({ access_token }).populate('user');
+            const tokenFromDB = await OAuth.findOne({ access_token }).populate(dbModelsEnum.USER);
 
             if (!tokenFromDB) {
                 throw new ErrorHandler(statusCodesEnum.UNAUTHORIZED, errorMessages.NOT_VALID_TOKEN);
@@ -51,9 +36,9 @@ const authMiddleware = {
                 throw new ErrorHandler(statusCodesEnum.UNAUTHORIZED, errorMessages.WRONG_TOKEN);
             }
 
-            await authService.verifyToken(refresh_token, 'refresh');
+            await authService.verifyToken(refresh_token, middlewareParamEnum.REFRESH);
 
-            const tokenFromDB = await OAuth.findOne({ refresh_token }).populate('user');
+            const tokenFromDB = await OAuth.findOne({ refresh_token }).populate(dbModelsEnum.USER);
 
             if (!tokenFromDB) {
                 throw new ErrorHandler(statusCodesEnum.UNAUTHORIZED, errorMessages.WRONG_TOKEN);
