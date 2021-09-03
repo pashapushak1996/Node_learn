@@ -54,16 +54,21 @@ const userMiddleware = {
 
     checkUserRole: (roles = []) => (req, res, next) => {
         try {
-            const { loggedUser, currentUser } = req;
+            const { loggedUser, params: { user_id } } = req;
 
-            const isLoggedUser = loggedUser._id.toString() === currentUser._id.toString();
+            const isLoggedUser = loggedUser._id.toString() === user_id;
 
-            if (isLoggedUser || roles.includes(currentUser.role)) {
-                next();
-                return;
+            if (isLoggedUser) {
+                return next();
             }
 
-            throw new ErrorHandler(statusCodesEnum.FORBIDDEN, errorMessages.ACCESS_DENIED);
+            if (!roles.length) {
+                return next();
+            }
+
+            if (!roles.includes(loggedUser.role)) {
+                throw new ErrorHandler(statusCodesEnum.FORBIDDEN, errorMessages.ACCESS_DENIED);
+            }
         } catch (e) {
             next(e);
         }
