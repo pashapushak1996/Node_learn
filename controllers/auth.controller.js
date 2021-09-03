@@ -1,4 +1,4 @@
-const { middlewareParamEnum } = require('../constants');
+const { middlewareParamEnum, statusCodesEnum } = require('../constants');
 const { OAuth } = require('../dataBase');
 const { passwordService, authService } = require('../services');
 const { userDataNormalizator } = require('../utils');
@@ -14,7 +14,7 @@ const authController = {
 
             await OAuth.create({ ...tokenPair, user: currentUser._id });
 
-            res.json({ ...tokenPair, user: userDataNormalizator(currentUser) });
+            res.status(statusCodesEnum.CREATED).json({ ...tokenPair, user: userDataNormalizator(currentUser) });
         } catch (e) {
             next(e);
         }
@@ -25,6 +25,8 @@ const authController = {
             const access_token = req.get(middlewareParamEnum.AUTHORIZATION);
 
             await OAuth.deleteOne({ access_token });
+
+            res.status(statusCodesEnum.NO_CONTENT);
         } catch (e) {
             next(e);
         }
