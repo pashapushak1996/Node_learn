@@ -28,5 +28,4 @@ module.exports = {
             throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.WRONG_TOKEN);
         }
     }
-
 };

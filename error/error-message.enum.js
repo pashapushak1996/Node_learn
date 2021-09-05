@@ -4,5 +4,7 @@ module.exports = {
     USER_NOT_FOUND: 'User not found',
     EMAIL_IS_EXIST: 'Email is exist',
     EMAIL_OR_PASSWORD_ERR: 'Email or password is wrong',
-    WRONG_TOKEN: 'Wrong token'
+    WRONG_TOKEN: 'Wrong token',
+    NO_TOKEN: 'No token',
+    ACCESS_DENIED: 'Access denied'
 };

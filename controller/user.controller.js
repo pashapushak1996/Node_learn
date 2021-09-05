@@ -26,11 +26,11 @@ const userController = {
         try {
             const { password } = req.body;
 
-            const hashPassword = passwordService.hashPassword(password);
+            const hashPassword = await passwordService.hashPassword(password);
 
             const user = await User.create({ ...req.body, password: hashPassword });
 
-            const normalizedUser = userUtil.dataNormalizator(user);
+            const normalizedUser = userUtil.dataNormalizator(user.toJSON());
 
             res
                 .status(statusCodeEnum.CREATED)

@@ -49,6 +49,46 @@ const userMiddleware = {
         } catch (e) {
             next(e);
         }
+    },
+
+    checkIsLoggedUser: (req, res, next) => {
+        try {
+            const { params: { userId }, loggedUser } = req;
+
+            const isLoggedUser = loggedUser._id.toString() === userId;
+
+            if (!isLoggedUser) {
+                throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.ACCESS_DENIED);
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    checkUserRole: (rolesArray) => (req, res, next) => {
+        try {
+            const { params: { userId }, loggedUser } = req;
+
+            const isLoggedUser = loggedUser._id.toString() === userId;
+
+            if (isLoggedUser) {
+                return next();
+            }
+
+            if (!rolesArray.length) {
+                return next();
+            }
+
+            if (!rolesArray.includes(loggedUser.role)) {
+                throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.ACCESS_DENIED);
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
     }
 };
 
