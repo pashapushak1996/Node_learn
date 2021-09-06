@@ -14,13 +14,13 @@ const authMiddleware = {
 
             await jwtService.verifyToken(access_token);
 
-            const token = await dbModels.OAuth.findOne({ access_token }).populate(dbModelsEnum.USER);
+            const tokenFromDB = await dbModels.OAuth.findOne({ access_token }).populate(dbModelsEnum.USER);
 
-            if (!token) {
+            if (!tokenFromDB) {
                 throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.WRONG_TOKEN);
             }
 
-            req.loggedUser = token.user;
+            req.loggedUser = tokenFromDB.user;
 
             next();
         } catch (e) {

@@ -6,7 +6,7 @@ const { userUtil } = require('../util');
 const authController = {
     login: async (req, res, next) => {
         try {
-            const { body: { password }, user } = req;
+            const { user, body: { password } } = req;
 
             await passwordService.comparePassword(password, user.password);
 
@@ -16,10 +16,7 @@ const authController = {
 
             res
                 .status(statusCodeEnum.CREATED)
-                .json({
-                    ...tokenPair,
-                    user: userUtil.dataNormalizator(user)
-                });
+                .json({ ...tokenPair, user: userUtil.dataNormalizator(user) });
         } catch (e) {
             next(e);
         }
@@ -39,19 +36,16 @@ const authController = {
 
     refresh: async (req, res, next) => {
         try {
-            const user = req.loggedUser;
-
             const refresh_token = req.get(middlewareParamEnum.AUTHORIZATION);
+            const { loggedUser } = req;
 
             await dbModels.OAuth.deleteOne({ refresh_token });
 
             const tokenPair = await jwtService.generateTokenPair();
 
-            await dbModels.OAuth.create({ ...tokenPair, user: user._id });
+            await dbModels.OAuth.create({ ...tokenPair, user: loggedUser._id });
 
-            res
-                .status(statusCodeEnum.CREATED)
-                .json({ ...tokenPair, user: userUtil.dataNormalizator(user) });
+            res.sendStatus(statusCodeEnum.CREATED);
         } catch (e) {
             next(e);
         }

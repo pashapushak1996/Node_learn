@@ -20,6 +20,7 @@ router.get('/:userId',
         middlewareParamEnum.PARAM,
         middlewareParamEnum.DB_ID
     ),
+    userMiddleware.throwIfUserNotExist,
     userController.getSingleUser);
 
 router.put('/:userId',
