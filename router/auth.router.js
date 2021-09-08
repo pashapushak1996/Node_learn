@@ -19,6 +19,7 @@ router.post('/refresh',
     authController.refresh);
 
 router.post('/password/forgot',
+    generalMiddleware.dynamicValidator(authValidator.checkMail),
     userMiddleware.getUserByDynamicParam(EMAIL),
     authController.forgot);
 
