@@ -7,5 +7,6 @@ module.exports = {
     WRONG_TOKEN: 'Wrong token',
     NO_TOKEN: 'No token',
     ACCESS_DENIED: 'Access denied',
-    TEMPLATE_NOT_FOUND: 'Template not found'
+    TEMPLATE_NOT_FOUND: 'Template not found',
+    VALIDATION_ERR: 'Validation failed'
 };
