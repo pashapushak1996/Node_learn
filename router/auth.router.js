@@ -18,4 +18,13 @@ router.post('/refresh',
     authMiddleware.checkRefreshToken,
     authController.refresh);
 
+router.post('/password/forgot',
+    userMiddleware.getUserByDynamicParam(EMAIL),
+    authController.forgot);
+
+router.post('/password/reset/',
+    generalMiddleware.dynamicValidator(authValidator.checkPass),
+    authMiddleware.checkActionToken,
+    authController.reset);
+
 module.exports = router;

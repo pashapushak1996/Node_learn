@@ -50,6 +50,30 @@ const authMiddleware = {
         } catch (e) {
             next(e);
         }
+    },
+
+    checkActionToken: async (req, res, next) => {
+        try {
+            const action_token = req.get(middlewareParamEnum.AUTHORIZATION);
+
+            if (!action_token) {
+                throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.NO_TOKEN);
+            }
+
+            await jwtService.verifyToken(action_token, 'action');
+
+            const tokenFromDB = await dbModels.ActionToken.findOne({ action_token }).populate(dbModelsEnum.USER);
+
+            if (!tokenFromDB) {
+                throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.WRONG_TOKEN);
+            }
+
+            req.user = tokenFromDB.user;
+
+            next();
+        } catch (e) {
+            next(e);
+        }
     }
 };
 

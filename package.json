@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-   "start": "nodemon app.js"
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -18,12 +18,18 @@
   "homepage": "https://github.com/pashapushak1996/Node_learn#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "dotenv": "^10.0.0",
+    "email-templates": "^8.0.8",
     "express": "^4.17.1",
     "joi": "^17.4.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.4"
+    "mongoose": "^6.0.4",
+    "nodemailer": "^6.6.3",
+    "pug": "^3.0.2"
   },
   "devDependencies": {
+    "@types/nodemailer": "^6.4.4",
+    "@types/email-templates": "^8.0.4",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.24.1",

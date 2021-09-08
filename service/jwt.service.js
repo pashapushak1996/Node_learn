@@ -4,7 +4,13 @@ const { promisify } = require('util');
 const { ErrorHandler, errorMessageEnum } = require('../error');
 const { statusCodeEnum } = require('../constant');
 
-const { variables: { ACCESS_SECRET_KEY, REFRESH_SECRET_KEY } } = require('../config');
+const {
+    variables: {
+        ACCESS_SECRET_KEY,
+        REFRESH_SECRET_KEY,
+        ACTION_SECRET_KEY
+    }
+} = require('../config');
 
 const verifyTokenPromisify = promisify(jwt.verify);
 
@@ -19,9 +25,29 @@ const jwtService = {
         };
     },
 
+    generateActionToken: () => {
+        const action_token = jwt.sign({}, ACTION_SECRET_KEY, { expiresIn: '5m' });
+
+        return { action_token };
+    },
+
     verifyToken: async (token, tokenType = 'access') => {
         try {
-            const secretWord = tokenType === 'access' ? ACCESS_SECRET_KEY : REFRESH_SECRET_KEY;
+            let secretWord;
+
+            switch (tokenType) {
+                case 'access':
+                    secretWord = ACCESS_SECRET_KEY;
+                    break;
+                case 'refresh':
+                    secretWord = REFRESH_SECRET_KEY;
+                    break;
+                case 'action':
+                    secretWord = ACTION_SECRET_KEY;
+                    break;
+                default:
+                    break;
+            }
 
             await verifyTokenPromisify(token, secretWord);
         } catch (e) {

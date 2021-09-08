@@ -1,6 +1,6 @@
-const { statusCodeEnum } = require('../constant');
+const { statusCodeEnum, emailTemplatesEnum, userRolesEnum } = require('../constant');
 const { dbModels: { User } } = require('../dataBase');
-const { passwordService } = require('../service');
+const { emailService, passwordService } = require('../service');
 const { userUtil } = require('../util');
 
 const userController = {
@@ -32,6 +32,12 @@ const userController = {
 
             const normalizedUser = userUtil.dataNormalizator(user.toJSON());
 
+            await emailService.sendMessage(
+                'pavlopushak1996@gmail.com',
+                emailTemplatesEnum.ACCOUNT_CREATED,
+                { userName: normalizedUser.name }
+            );
+
             res
                 .status(statusCodeEnum.CREATED)
                 .json(normalizedUser);
@@ -48,6 +54,12 @@ const userController = {
                 new: true
             });
 
+            await emailService.sendMessage(
+                'pavlopushak1996@gmail.com',
+                emailTemplatesEnum.ACCOUNT_UPDATED,
+                { userName: user.name }
+            );
+
             const normalizedUser = userUtil.dataNormalizator(user);
 
             res.json(normalizedUser);
@@ -58,9 +70,25 @@ const userController = {
 
     deleteUser: async (req, res, next) => {
         try {
-            const { user: { _id } } = req;
+            const { user: { _id, role, name: userName } } = req;
 
             await User.findOneAndDelete({ _id });
+
+            const isAdmin = role === userRolesEnum.ADMIN;
+
+            if (isAdmin) {
+                await emailService.sendMessage(
+                    'pavlopushak1996@gmail.com',
+                    emailTemplatesEnum.DELETE_ACCOUNT_ADMIN,
+                    { userName }
+                );
+            } else {
+                await emailService.sendMessage(
+                    'pavlopushak1996@gmail.com',
+                    emailTemplatesEnum.DELETE_ACCOUNT_USER,
+                    { userName }
+                );
+            }
 
             res.sendStatus(statusCodeEnum.NO_CONTENT);
         } catch (e) {

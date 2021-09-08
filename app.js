@@ -1,9 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
+require('dotenv').config();
+
 const { statusCodeEnum } = require('./constant');
 const { variables } = require('./config');
-const { errorMessageEnum } = require('./error');
+const { errorMessageEnum, ErrorHandler } = require('./error');
 const { authRouter, userRouter } = require('./router');
 
 const app = express();
@@ -42,6 +44,6 @@ function startServer() {
             console.log(`App listen on localhost//:${variables.PORT}`);
         });
     } catch (e) {
-        console.log(e);
+        throw new ErrorHandler(statusCodeEnum.SERVER_ERROR, errorMessageEnum.INTERNAL_SERVER_ERROR);
     }
 }

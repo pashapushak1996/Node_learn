@@ -7,6 +7,11 @@ const checkAuthData = Joi.object({
     password: Joi.string().regex(regexpEnum.PASSWORD_REGEX).required().trim(),
 });
 
+const checkPass = ({
+    password: Joi.string().regex(regexpEnum.PASSWORD_REGEX).required().trim()
+});
+
 module.exports = {
-    checkAuthData
+    checkAuthData,
+    checkPass
 };
