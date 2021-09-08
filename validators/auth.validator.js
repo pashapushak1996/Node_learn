@@ -11,7 +11,12 @@ const checkPass = ({
     password: Joi.string().regex(regexpEnum.PASSWORD_REGEX).required().trim()
 });
 
+const checkMail = ({
+    email: Joi.string().regex(regexpEnum.EMAIL_REGEX).required().trim()
+});
+
 module.exports = {
     checkAuthData,
-    checkPass
+    checkPass,
+    checkMail
 };

@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 
 const { ErrorHandler, errorMessageEnum } = require('../error');
-const { statusCodeEnum } = require('../constant');
+const { statusCodeEnum, tokenTypesEnum } = require('../constant');
 
 const {
     variables: {
@@ -31,18 +31,18 @@ const jwtService = {
         return { action_token };
     },
 
-    verifyToken: async (token, tokenType = 'access') => {
+    verifyToken: async (token, tokenType = tokenTypesEnum.ACCESS) => {
         try {
             let secretWord;
 
             switch (tokenType) {
-                case 'access':
+                case [tokenTypesEnum.ACCESS]:
                     secretWord = ACCESS_SECRET_KEY;
                     break;
-                case 'refresh':
+                case [tokenTypesEnum.REFRESH]:
                     secretWord = REFRESH_SECRET_KEY;
                     break;
-                case 'action':
+                case [tokenTypesEnum.ACTION]:
                     secretWord = ACTION_SECRET_KEY;
                     break;
                 default:

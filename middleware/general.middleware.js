@@ -7,7 +7,7 @@ const generalMiddleware = {
             const { error } = validatorName.validate(req[validateIn]);
 
             if (error) {
-                throw new ErrorHandler(statusCodeEnum.BAD_REQUEST, errorMessageEnum);
+                throw new ErrorHandler(statusCodeEnum.BAD_REQUEST, errorMessageEnum.NO_TOKEN);
             }
 
             next();

@@ -71,11 +71,15 @@ const userController = {
     deleteUser: async (req, res, next) => {
         try {
             const {
-                _id,
-                role,
-                name: userName,
-                email
-            } = req.user;
+                user: {
+                    name: userName,
+                    email,
+                    _id
+                },
+                loggedUser: {
+                    role
+                },
+            } = req;
 
             await User.findOneAndDelete({ _id });
 

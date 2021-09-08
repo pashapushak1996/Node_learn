@@ -1,4 +1,6 @@
-const { statusCodeEnum, middlewareParamEnum, emailTemplatesEnum } = require('../constant');
+const {
+    statusCodeEnum, middlewareParamEnum, responseMessagesEnum, emailTemplatesEnum
+} = require('../constant');
 const { dbModels } = require('../dataBase');
 const { passwordService, jwtService, emailService } = require('../service');
 const { userUtil } = require('../util');
@@ -13,6 +15,8 @@ const authController = {
             const tokenPair = await jwtService.generateTokenPair();
 
             await dbModels.OAuth.create({ ...tokenPair, user: user._id });
+
+            await emailService.sendMessage(user.email, emailTemplatesEnum.USER_IS_LOGGED, { userName: user.name });
 
             res
                 .status(statusCodeEnum.CREATED)
@@ -53,12 +57,12 @@ const authController = {
 
     forgot: async (req, res, next) => {
         try {
-            const { email, _id } = req.user;
+            const { email, _id, name: userName } = req.user;
             const { action_token } = jwtService.generateActionToken();
 
             await dbModels.ActionToken.create({ action_token, user: _id });
 
-            await emailService.sendMessage(email, emailTemplatesEnum.FORGOT_PASSWORD, { action_token });
+            await emailService.sendMessage(email, emailTemplatesEnum.FORGOT_PASSWORD, { action_token, userName });
 
             res.sendStatus(statusCodeEnum.CREATED);
         } catch (e) {
@@ -68,7 +72,10 @@ const authController = {
 
     reset: async (req, res, next) => {
         try {
-            const { password, user: { _id, email, name } } = req;
+            const {
+                body: { password },
+                user: { _id, email, name }
+            } = req;
 
             const action_token = req.get(middlewareParamEnum.AUTHORIZATION);
 
@@ -78,6 +85,8 @@ const authController = {
 
             await dbModels.User.updateOne({ _id }, { $set: { password: hashPassword } });
 
+            await dbModels.OAuth.deleteMany({ user: _id });
+
             await emailService.sendMessage(email, [
                 emailTemplatesEnum.CHANGE_PASSWORD,
                 { userName: name }
@@ -85,7 +94,7 @@ const authController = {
 
             res
                 .status(statusCodeEnum.CREATED)
-                .json('Password was changed');
+                .json(responseMessagesEnum.PASS_WAS_CHANGED);
         } catch (e) {
             next(e);
         }
