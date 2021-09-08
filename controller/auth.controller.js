@@ -60,7 +60,7 @@ const authController = {
 
             await emailService.sendMessage(email, emailTemplatesEnum.FORGOT_PASSWORD, { action_token });
 
-            res.status(200).json(action_token);
+            res.sendStatus(statusCodeEnum.CREATED);
         } catch (e) {
             next(e);
         }
