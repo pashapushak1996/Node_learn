@@ -84,6 +84,7 @@ const userMiddleware = {
             if (!rolesArray.includes(loggedUser.role)) {
                 throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.ACCESS_DENIED);
             }
+
             next();
         } catch (e) {
             next(e);

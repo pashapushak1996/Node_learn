@@ -33,7 +33,7 @@ const userController = {
             const normalizedUser = userUtil.dataNormalizator(user.toJSON());
 
             await emailService.sendMessage(
-                'pavlopushak1996@gmail.com',
+                normalizedUser.email,
                 emailTemplatesEnum.ACCOUNT_CREATED,
                 { userName: normalizedUser.name }
             );
@@ -48,14 +48,14 @@ const userController = {
 
     updateUser: async (req, res, next) => {
         try {
-            const { user: { _id } } = req;
+            const { _id, email } = req.user;
 
             const user = await User.findByIdAndUpdate({ _id }, req.body, {
                 new: true
             });
 
             await emailService.sendMessage(
-                'pavlopushak1996@gmail.com',
+                email,
                 emailTemplatesEnum.ACCOUNT_UPDATED,
                 { userName: user.name }
             );
@@ -70,7 +70,12 @@ const userController = {
 
     deleteUser: async (req, res, next) => {
         try {
-            const { user: { _id, role, name: userName } } = req;
+            const {
+                _id,
+                role,
+                name: userName,
+                email
+            } = req.user;
 
             await User.findOneAndDelete({ _id });
 
@@ -78,13 +83,13 @@ const userController = {
 
             if (isAdmin) {
                 await emailService.sendMessage(
-                    'pavlopushak1996@gmail.com',
+                    email,
                     emailTemplatesEnum.DELETE_ACCOUNT_ADMIN,
                     { userName }
                 );
             } else {
                 await emailService.sendMessage(
-                    'pavlopushak1996@gmail.com',
+                    email,
                     emailTemplatesEnum.DELETE_ACCOUNT_USER,
                     { userName }
                 );
