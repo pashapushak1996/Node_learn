@@ -2,11 +2,10 @@ const { dbModels } = require('../dataBase');
 const {
     middlewareParamEnum,
     statusCodeEnum,
-    dbModelsEnum,
     tokenTypesEnum
 } = require('../constant');
 const { ErrorHandler, errorMessageEnum } = require('../error');
-const { jwtService } = require('../service');
+const { jwtService, passwordService } = require('../service');
 
 const authMiddleware = {
     checkAccessToken: async (req, res, next) => {
@@ -19,7 +18,7 @@ const authMiddleware = {
 
             await jwtService.verifyToken(access_token);
 
-            const tokenFromDB = await dbModels.OAuth.findOne({ access_token }).populate(dbModelsEnum.USER);
+            const tokenFromDB = await dbModels.OAuth.findOne({ access_token });
 
             if (!tokenFromDB) {
                 throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.WRONG_TOKEN);
@@ -43,7 +42,7 @@ const authMiddleware = {
 
             await jwtService.verifyToken(refresh_token, tokenTypesEnum.REFRESH);
 
-            const tokenFromDB = await dbModels.OAuth.findOne({ refresh_token }).populate(dbModelsEnum.USER);
+            const tokenFromDB = await dbModels.OAuth.findOne({ refresh_token });
 
             if (!tokenFromDB) {
                 throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.WRONG_TOKEN);
@@ -57,7 +56,7 @@ const authMiddleware = {
         }
     },
 
-    checkActionToken: async (req, res, next) => {
+    checkActionToken: (tokenType) => async (req, res, next) => {
         try {
             const action_token = req.get(middlewareParamEnum.AUTHORIZATION);
 
@@ -65,9 +64,9 @@ const authMiddleware = {
                 throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.NO_TOKEN);
             }
 
-            await jwtService.verifyToken(action_token, tokenTypesEnum.ACTION);
+            await jwtService.verifyActionToken(action_token, tokenType);
 
-            const tokenFromDB = await dbModels.ActionToken.findOne({ action_token }).populate(dbModelsEnum.USER);
+            const tokenFromDB = await dbModels.ActionToken.findOne({ action_token });
 
             if (!tokenFromDB) {
                 throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.WRONG_TOKEN);
@@ -75,6 +74,17 @@ const authMiddleware = {
 
             req.user = tokenFromDB.user;
 
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    checkOldPassword: async (req, res, next) => {
+        try {
+            const { loggedUser, body: { oldPassword } } = req;
+
+            await passwordService.comparePassword(loggedUser.password, oldPassword);
             next();
         } catch (e) {
             next(e);

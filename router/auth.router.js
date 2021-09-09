@@ -1,13 +1,13 @@
 const router = require('express').Router();
 
 const { authController } = require('../controller');
-const { middlewareParamEnum: { EMAIL } } = require('../constant');
+const { middlewareParamEnum, tokenTypesEnum } = require('../constant');
 const { authMiddleware, generalMiddleware, userMiddleware } = require('../middleware');
 const { authValidator } = require('../validators');
 
 router.post('/',
     generalMiddleware.dynamicValidator(authValidator.checkAuthData),
-    userMiddleware.getUserByDynamicParam(EMAIL),
+    userMiddleware.getUserByDynamicParam(middlewareParamEnum.EMAIL),
     authController.login);
 
 router.post('/logout',
@@ -20,12 +20,21 @@ router.post('/refresh',
 
 router.post('/password/forgot',
     generalMiddleware.dynamicValidator(authValidator.checkMail),
-    userMiddleware.getUserByDynamicParam(EMAIL),
+    userMiddleware.getUserByDynamicParam(middlewareParamEnum.EMAIL),
     authController.forgot);
 
-router.post('/password/reset/',
+router.post('/password/reset',
     generalMiddleware.dynamicValidator(authValidator.checkPass),
-    authMiddleware.checkActionToken,
+    authMiddleware.checkActionToken(tokenTypesEnum.FORGOT_PASS),
     authController.reset);
+
+router.post('password/change',
+    authMiddleware.checkAccessToken,
+    authMiddleware.checkOldPassword,
+    authController.changePassword);
+
+router.post('/activate',
+    authMiddleware.checkActionToken(tokenTypesEnum.ACTIVATE_ACC),
+    authController.activateUser);
 
 module.exports = router;

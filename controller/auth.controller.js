@@ -1,5 +1,9 @@
 const {
-    statusCodeEnum, middlewareParamEnum, responseMessagesEnum, emailTemplatesEnum
+    statusCodeEnum,
+    middlewareParamEnum,
+    responseMessagesEnum,
+    emailTemplatesEnum,
+    tokenTypesEnum
 } = require('../constant');
 const { dbModels } = require('../dataBase');
 const { passwordService, jwtService, emailService } = require('../service');
@@ -58,7 +62,7 @@ const authController = {
     forgot: async (req, res, next) => {
         try {
             const { email, _id, name: userName } = req.user;
-            const { action_token } = jwtService.generateActionToken();
+            const { action_token } = jwtService.generateActionToken(tokenTypesEnum.FORGET_PASS);
 
             await dbModels.ActionToken.create({ action_token, user: _id });
 
@@ -99,6 +103,51 @@ const authController = {
             next(e);
         }
     },
+
+    activateUser: async (req, res, next) => {
+        try {
+            const { _id, email, name } = req.user;
+
+            await dbModels.ActionToken.deleteOne({ user: _id });
+
+            await dbModels.User.findOneAndUpdate({ _id }, { isActivated: true });
+
+            await emailService.sendMessage(
+                email,
+                emailTemplatesEnum.ACCOUNT_ACTIVATED,
+                { userName: name }
+            );
+
+            res
+                .status(statusCodeEnum.CREATED);
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    changePassword: async (req, res, next) => {
+        try {
+            const {
+                body: { newPassword },
+                loggedUser: { name, email, _id }
+            } = req;
+
+            const hashPassword = await passwordService.hashPassword(newPassword);
+
+            await dbModels.User.findOneAndUpdate({ _id }, { password: hashPassword });
+
+            await emailService.sendMessage(
+                email,
+                emailTemplatesEnum.CHANGE_PASSWORD,
+                { userName: name }
+            );
+
+            res
+                .status(statusCodeEnum.CREATED);
+        } catch (e) {
+            next(e);
+        }
+    }
 };
 
 module.exports = authController;

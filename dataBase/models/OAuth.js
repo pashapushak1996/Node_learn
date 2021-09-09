@@ -18,6 +18,10 @@ const OAuthSchema = new Schema({
         required: true,
         ref: dbModelsEnum.USER
     }
+}, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
+
+OAuthSchema.pre('findOne', function() {
+    this.populate(dbModelsEnum.USER);
 });
 
 module.exports = model(dbModelsEnum.OAUTH, OAuthSchema);

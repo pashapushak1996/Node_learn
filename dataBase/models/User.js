@@ -24,7 +24,11 @@ const UserSchema = new Schema({
         type: String,
         default: userRolesEnum.USER,
         enum: Object.values(userRolesEnum)
+    },
+    isActivated: {
+        type: Boolean,
+        default: false
     }
-}, { timestamps: true });
+}, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
 
 module.exports = model(dbModelsEnum.USER, UserSchema);

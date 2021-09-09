@@ -6,5 +6,5 @@ module.exports = {
     DELETE_ACCOUNT_ADMIN: 5,
     USER_IS_LOGGED: 5,
     CHANGE_PASSWORD: 6,
-    ACTIVATE_ACCOUNT: 7
+    ACCOUNT_ACTIVATED: 7
 };

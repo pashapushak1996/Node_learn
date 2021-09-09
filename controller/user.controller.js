@@ -1,12 +1,17 @@
-const { statusCodeEnum, emailTemplatesEnum, userRolesEnum } = require('../constant');
-const { dbModels: { User } } = require('../dataBase');
-const { emailService, passwordService } = require('../service');
+const {
+    statusCodeEnum,
+    emailTemplatesEnum,
+    userRolesEnum,
+    tokenTypesEnum
+} = require('../constant');
+const { dbModels } = require('../dataBase');
+const { emailService, passwordService, jwtService } = require('../service');
 const { userUtil } = require('../util');
 
 const userController = {
     getUsers: async (req, res, next) => {
         try {
-            const users = await User.find(req.query);
+            const users = await dbModels.User.find(req.query);
 
             res.json(users);
         } catch (e) {
@@ -28,14 +33,16 @@ const userController = {
 
             const hashPassword = await passwordService.hashPassword(password);
 
-            const user = await User.create({ ...req.body, password: hashPassword });
+            const user = await dbModels.User.create({ ...req.body, password: hashPassword });
+
+            const activate_token = await jwtService.generateActionToken(tokenTypesEnum.ACTIVATE_ACC);
 
             const normalizedUser = userUtil.dataNormalizator(user.toJSON());
 
             await emailService.sendMessage(
                 normalizedUser.email,
                 emailTemplatesEnum.ACCOUNT_CREATED,
-                { userName: normalizedUser.name }
+                { userName: normalizedUser.name, activate_token }
             );
 
             res
@@ -50,7 +57,7 @@ const userController = {
         try {
             const { _id, email } = req.user;
 
-            const user = await User.findByIdAndUpdate({ _id }, req.body, {
+            const user = await dbModels.User.findByIdAndUpdate({ _id }, req.body, {
                 new: true
             });
 
@@ -81,7 +88,7 @@ const userController = {
                 },
             } = req;
 
-            await User.findOneAndDelete({ _id });
+            await dbModels.User.findOneAndDelete({ _id });
 
             const isAdmin = role === userRolesEnum.ADMIN;
 

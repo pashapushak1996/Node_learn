@@ -25,12 +25,19 @@ module.exports = {
         templateName: 'accountDeletedUser',
         subject: 'Account deleted'
     },
+
     [emailTemplatesEnum.FORGOT_PASSWORD]: {
         templateName: 'forgotPassword',
         subject: 'Forgot password'
     },
+
     [emailTemplatesEnum.CHANGE_PASSWORD]: {
         templateName: 'passwordChanged',
         subject: 'Change password'
+    },
+
+    [emailTemplatesEnum.ACCOUNT_ACTIVATED]: {
+        templateName: 'accountActivated',
+        subject: 'Activate account'
     }
 };
