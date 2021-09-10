@@ -29,6 +29,6 @@ const UserSchema = new Schema({
         type: Boolean,
         default: false
     }
-}, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
+}, { timestamps: true });
 
 module.exports = model(dbModelsEnum.USER, UserSchema);

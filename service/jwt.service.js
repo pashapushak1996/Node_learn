@@ -41,15 +41,19 @@ const jwtService = {
     generateActionToken: (tokenType) => {
         const secretWord = _getSecretWord(tokenType);
 
-        const action_token = jwt.sign({}, secretWord, { expiresIn: '5m' });
+        const action_token = jwt.sign({}, secretWord, { expiresIn: '10d' });
 
         return { action_token };
     },
 
     verifyActionToken: async (token, tokenType) => {
-        const secretWord = _getSecretWord(tokenType);
+        try {
+            const secretWord = _getSecretWord(tokenType);
 
-        await verifyTokenPromisify(token, secretWord);
+            await verifyTokenPromisify(token, secretWord);
+        } catch (e) {
+            throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.WRONG_TOKEN);
+        }
     }
 };
 
@@ -57,7 +61,7 @@ function _getSecretWord(tokenType) {
     let secretWord = '';
 
     switch (tokenType) {
-        case tokenTypesEnum.FORGET_PASS:
+        case tokenTypesEnum.FORGOT_PASS:
             secretWord = FORGET_PASS_SECRET_KEY;
             break;
         case tokenTypesEnum.ACTIVATE_ACC:

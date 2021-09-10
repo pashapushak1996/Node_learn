@@ -10,9 +10,10 @@ const ActionTokenSchema = new Schema({
     },
     user: {
         type: Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref: dbModelsEnum.USER
     },
-}, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
+}, { timestamps: true });
 
 ActionTokenSchema.pre('findOne', function() {
     this.populate(dbModelsEnum.USER);

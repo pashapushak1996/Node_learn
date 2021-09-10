@@ -1,4 +1,4 @@
-const { tokenTypesEnum, emailTemplatesEnum } = require('../constant');
+const { tokenTypesEnum, emailTemplatesEnum, statusCodeEnum } = require('../constant');
 const { jwtService, emailService } = require('../service');
 const { dbModels } = require('../dataBase');
 
@@ -11,13 +11,17 @@ const adminController = {
 
             await dbModels.User.create({ name, email, password });
 
-            const activate_token = jwtService.generateActionToken(tokenTypesEnum.ACTIVATE_ACC);
+            const { action_token } = jwtService.generateActionToken(tokenTypesEnum.ACTIVATE_ACC);
 
             await emailService.sendMessage(email, emailTemplatesEnum.ACCOUNT_CREATED, {
                 adminName: admin.name,
                 userName: name,
-                activate_token
+                activate_token: action_token
             });
+
+            res
+                .status(statusCodeEnum.CREATED)
+                .json('User created by admin');
         } catch (e) {
             next(e);
         }

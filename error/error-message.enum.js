@@ -8,5 +8,6 @@ module.exports = {
     NO_TOKEN: 'No token',
     ACCESS_DENIED: 'Access denied',
     TEMPLATE_NOT_FOUND: 'Template not found',
-    VALIDATION_ERR: 'Validation failed'
+    VALIDATION_ERR: 'Validation failed',
+    ACCOUNT_NOT_ACTIVE: 'Account is not active'
 };

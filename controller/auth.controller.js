@@ -2,7 +2,8 @@ const {
     statusCodeEnum,
     middlewareParamEnum,
     emailTemplatesEnum,
-    tokenTypesEnum
+    tokenTypesEnum,
+    responseMessagesEnum
 } = require('../constant');
 const { dbModels } = require('../dataBase');
 const { passwordService, jwtService, emailService } = require('../service');
@@ -86,17 +87,17 @@ const authController = {
 
             const hashPassword = await passwordService.hashPassword(password);
 
-            await dbModels.User.updateOne({ _id }, { $set: { password: hashPassword } });
+            const updatedUser = await dbModels.User.updateOne({ _id }, { password: hashPassword }, { new: true });
 
             await dbModels.OAuth.deleteMany({ user: _id });
 
-            await emailService.sendMessage(email, [
+            await emailService.sendMessage(email,
                 emailTemplatesEnum.CHANGE_PASSWORD,
-                { userName: name }
-            ]);
+                { userName: name });
 
             res
-                .status(statusCodeEnum.CREATED);
+                .status(statusCodeEnum.CREATED)
+                .json(userUtil.dataNormalizator(updatedUser));
         } catch (e) {
             next(e);
         }
@@ -106,9 +107,9 @@ const authController = {
         try {
             const { _id, email, name } = req.user;
 
-            await dbModels.ActionToken.deleteOne({ user: _id });
-
             await dbModels.User.findOneAndUpdate({ _id }, { isActivated: true });
+
+            await dbModels.ActionToken.deleteOne({ user: _id });
 
             await emailService.sendMessage(
                 email,
@@ -117,7 +118,8 @@ const authController = {
             );
 
             res
-                .status(statusCodeEnum.CREATED);
+                .status(statusCodeEnum.CREATED)
+                .json(responseMessagesEnum.ACC_IS_ACTIVE);
         } catch (e) {
             next(e);
         }
@@ -141,7 +143,8 @@ const authController = {
             );
 
             res
-                .status(statusCodeEnum.CREATED);
+                .status(statusCodeEnum.CREATED)
+                .json(responseMessagesEnum.PASS_WAS_CHANGED);
         } catch (e) {
             next(e);
         }

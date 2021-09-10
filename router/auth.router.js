@@ -8,6 +8,8 @@ const { authValidator } = require('../validators');
 router.post('/',
     generalMiddleware.dynamicValidator(authValidator.checkAuthData),
     userMiddleware.getUserByDynamicParam(middlewareParamEnum.EMAIL),
+    userMiddleware.throwIfUserNotExist,
+    userMiddleware.throwIfUserNotActive,
     authController.login);
 
 router.post('/logout',
@@ -21,6 +23,7 @@ router.post('/refresh',
 router.post('/password/forgot',
     generalMiddleware.dynamicValidator(authValidator.checkMail),
     userMiddleware.getUserByDynamicParam(middlewareParamEnum.EMAIL),
+    userMiddleware.throwIfUserNotExist,
     authController.forgot);
 
 router.post('/password/reset',
@@ -33,7 +36,7 @@ router.patch('/password/reset',
     authMiddleware.checkActionToken(tokenTypesEnum.FORGOT_PASS),
     authController.reset);
 
-router.post('password/change',
+router.post('/password/change',
     authMiddleware.checkAccessToken,
     authMiddleware.checkOldPassword,
     authController.changePassword);

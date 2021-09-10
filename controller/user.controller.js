@@ -35,19 +35,21 @@ const userController = {
 
             const user = await dbModels.User.create({ ...req.body, password: hashPassword });
 
-            const activate_token = await jwtService.generateActionToken(tokenTypesEnum.ACTIVATE_ACC);
+            const { action_token } = await jwtService.generateActionToken(tokenTypesEnum.ACTIVATE_ACC);
+
+            await dbModels.ActionToken.create({ action_token, user: user._id });
 
             const normalizedUser = userUtil.dataNormalizator(user.toJSON());
 
             await emailService.sendMessage(
                 normalizedUser.email,
                 emailTemplatesEnum.ACCOUNT_CREATED,
-                { userName: normalizedUser.name, activate_token }
+                { userName: normalizedUser.name, activate_token: action_token }
             );
 
             res
                 .status(statusCodeEnum.CREATED)
-                .json(normalizedUser);
+                .json({ normalizedUser, action_token });
         } catch (e) {
             next(e);
         }

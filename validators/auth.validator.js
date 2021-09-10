@@ -7,11 +7,11 @@ const checkAuthData = Joi.object({
     password: Joi.string().regex(regexpEnum.PASSWORD_REGEX).required().trim(),
 });
 
-const checkPass = ({
+const checkPass = Joi.object({
     password: Joi.string().regex(regexpEnum.PASSWORD_REGEX).required().trim()
 });
 
-const checkMail = ({
+const checkMail = Joi.object({
     email: Joi.string().regex(regexpEnum.EMAIL_REGEX).required().trim()
 });
 

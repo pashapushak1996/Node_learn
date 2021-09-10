@@ -51,6 +51,20 @@ const userMiddleware = {
         }
     },
 
+    throwIfUserNotActive: (req, res, next) => {
+        try {
+            const { user } = req;
+
+            if (!user.isActivated) {
+                throw new ErrorHandler(statusCodeEnum.CONFLICT, errorMessageEnum.ACCOUNT_NOT_ACTIVE);
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
     checkIsLoggedUser: (req, res, next) => {
         try {
             const { params: { userId }, loggedUser } = req;
