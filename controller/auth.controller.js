@@ -134,6 +134,8 @@ const authController = {
 
             const hashPassword = await passwordService.hashPassword(newPassword);
 
+            await dbModels.OAuth.deleteMany({ _id });
+
             await dbModels.User.findOneAndUpdate({ _id }, { password: hashPassword });
 
             await emailService.sendMessage(

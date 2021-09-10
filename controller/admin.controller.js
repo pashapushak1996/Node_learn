@@ -2,11 +2,14 @@ const {
     tokenTypesEnum,
     emailTemplatesEnum,
     statusCodeEnum,
-    responseMessagesEnum
+    responseMessagesEnum,
+    userRolesEnum
 } = require('../constant');
 const { jwtService, emailService } = require('../service');
 const { dbModels } = require('../dataBase');
 
+// - в checkOldPassword - в comparePassword - передавай хеш та пароль з боді, в такому порядку як приймаєш у сервісі
+//
 const adminController = {
     createUserAdmin: async (req, res, next) => {
         try {
@@ -14,15 +17,20 @@ const adminController = {
 
             const password = _getRandomPassword(8);
 
-            await dbModels.User.create({ name, email, password });
+            await dbModels.User.create({
+                name, email, password, role: userRolesEnum.ADMIN
+            });
 
             const { action_token } = jwtService.generateActionToken(tokenTypesEnum.ACTIVATE_ACC);
 
-            await emailService.sendMessage(email, emailTemplatesEnum.ACCOUNT_CREATED, {
-                adminName: admin.name,
-                userName: name,
-                activate_token: action_token
-            });
+            await emailService.sendMessage(
+                email,
+                emailTemplatesEnum.ACCOUNT_CREATED_ADMIN, {
+                    adminName: admin.name,
+                    userName: name,
+                    activate_token: action_token
+                }
+            );
 
             res
                 .status(statusCodeEnum.CREATED)

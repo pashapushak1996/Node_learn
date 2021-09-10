@@ -16,6 +16,11 @@ module.exports = {
         subject: 'Account created'
     },
 
+    [emailTemplatesEnum.ACCOUNT_CREATED_ADMIN]: {
+        templateName: 'accountCreatedAdmin',
+        subject: 'Account created by admin'
+    },
+
     [emailTemplatesEnum.DELETE_ACCOUNT_ADMIN]: {
         templateName: 'accountDeletedAdmin',
         subject: 'Account deleted'

@@ -109,7 +109,7 @@ const userMiddleware = {
         try {
             const { loggedUser } = req;
 
-            const isAdmin = loggedUser.role === (userRolesEnum.ADMIN || userRolesEnum.SUPER_ADMIN);
+            const isAdmin = loggedUser.role === userRolesEnum.SUPER_ADMIN || userRolesEnum.ADMIN;
 
             if (!isAdmin) {
                 throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.ACCESS_DENIED);

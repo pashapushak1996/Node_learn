@@ -37,6 +37,7 @@ router.patch('/password/reset',
     authController.reset);
 
 router.post('/password/change',
+    generalMiddleware.dynamicValidator(authValidator.checkPass),
     authMiddleware.checkAccessToken,
     authMiddleware.checkOldPassword,
     authController.changePassword);

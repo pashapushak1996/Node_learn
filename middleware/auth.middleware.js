@@ -2,8 +2,7 @@ const { dbModels } = require('../dataBase');
 const {
     middlewareParamEnum,
     statusCodeEnum,
-    tokenTypesEnum,
-    dbModelsEnum
+    tokenTypesEnum
 } = require('../constant');
 const { ErrorHandler, errorMessageEnum } = require('../error');
 const { jwtService, passwordService } = require('../service');
@@ -43,7 +42,7 @@ const authMiddleware = {
 
             await jwtService.verifyToken(refresh_token, tokenTypesEnum.REFRESH);
 
-            const tokenFromDB = await dbModels.OAuth.findOne({ refresh_token }).populate(dbModelsEnum.USER);
+            const tokenFromDB = await dbModels.OAuth.findOne({ refresh_token });
 
             if (!tokenFromDB) {
                 throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.WRONG_TOKEN);
@@ -85,7 +84,7 @@ const authMiddleware = {
         try {
             const { loggedUser, body: { oldPassword } } = req;
 
-            await passwordService.comparePassword(loggedUser.password, oldPassword);
+            await passwordService.comparePassword(oldPassword, loggedUser.password);
             next();
         } catch (e) {
             next(e);
