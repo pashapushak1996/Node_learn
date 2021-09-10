@@ -1,0 +1,7 @@
+extends container
+block content
+    div
+        h3 Welcome #{userName} on our platform
+        | Admin #{adminName} create your account
+        a(href=frontendUrl + '/activate/token?=' + activate_token) Please click on this link for activate account and set password
+    div

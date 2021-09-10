@@ -1,4 +1,4 @@
-const { statusCodeEnum, middlewareParamEnum } = require('../constant');
+const { statusCodeEnum, middlewareParamEnum, userRolesEnum } = require('../constant');
 const { dbModels: { User } } = require('../dataBase');
 const { ErrorHandler, errorMessageEnum } = require('../error');
 
@@ -90,6 +90,24 @@ const userMiddleware = {
             next(e);
         }
     },
+
+    checkIsAdmin: (req, res, next) => {
+        try {
+            const { loggedUser } = req;
+
+            const isAdmin = loggedUser.role === (userRolesEnum.ADMIN || userRolesEnum.SUPER_ADMIN);
+
+            if (!isAdmin) {
+                throw new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.ACCESS_DENIED);
+            }
+
+            req.admin = loggedUser;
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
 };
 
 module.exports = userMiddleware;

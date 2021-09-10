@@ -6,7 +6,7 @@ require('dotenv').config();
 const { statusCodeEnum } = require('./constant');
 const { variables } = require('./config');
 const { errorMessageEnum, ErrorHandler } = require('./error');
-const { authRouter, userRouter } = require('./router');
+const { authRouter, userRouter, adminRouter } = require('./router');
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 startServer();
-
+app.use('/admin', adminRouter);
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('*', _notFoundErrorHandler);

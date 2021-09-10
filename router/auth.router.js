@@ -25,6 +25,11 @@ router.post('/password/forgot',
 
 router.post('/password/reset',
     generalMiddleware.dynamicValidator(authValidator.checkPass),
+    authMiddleware.checkActionToken(tokenTypesEnum.ACTIVATE_ACC),
+    authController.reset);
+
+router.patch('/password/reset',
+    generalMiddleware.dynamicValidator(authValidator.checkPass),
     authMiddleware.checkActionToken(tokenTypesEnum.FORGOT_PASS),
     authController.reset);
 

@@ -1,7 +1,6 @@
 const {
     statusCodeEnum,
     middlewareParamEnum,
-    responseMessagesEnum,
     emailTemplatesEnum,
     tokenTypesEnum
 } = require('../constant');
@@ -62,7 +61,7 @@ const authController = {
     forgot: async (req, res, next) => {
         try {
             const { email, _id, name: userName } = req.user;
-            const { action_token } = jwtService.generateActionToken(tokenTypesEnum.FORGET_PASS);
+            const { action_token } = jwtService.generateActionToken(tokenTypesEnum.FORGOT_PASS);
 
             await dbModels.ActionToken.create({ action_token, user: _id });
 
@@ -97,8 +96,7 @@ const authController = {
             ]);
 
             res
-                .status(statusCodeEnum.CREATED)
-                .json(responseMessagesEnum.PASS_WAS_CHANGED);
+                .status(statusCodeEnum.CREATED);
         } catch (e) {
             next(e);
         }
