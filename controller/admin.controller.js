@@ -1,4 +1,9 @@
-const { tokenTypesEnum, emailTemplatesEnum, statusCodeEnum } = require('../constant');
+const {
+    tokenTypesEnum,
+    emailTemplatesEnum,
+    statusCodeEnum,
+    responseMessagesEnum
+} = require('../constant');
 const { jwtService, emailService } = require('../service');
 const { dbModels } = require('../dataBase');
 
@@ -21,7 +26,7 @@ const adminController = {
 
             res
                 .status(statusCodeEnum.CREATED)
-                .json('User created by admin');
+                .json(responseMessagesEnum.USER_CREATED_BY_ADMIN);
         } catch (e) {
             next(e);
         }
