@@ -7,13 +7,15 @@ const { statusCodeEnum } = require('./constant');
 const { variables } = require('./config');
 const { errorMessageEnum, ErrorHandler } = require('./error');
 const { authRouter, userRouter, adminRouter } = require('./router');
+const { dbUtil } = require('./util');
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-startServer();
+_startServer();
+
 app.use('/admin', adminRouter);
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
@@ -36,9 +38,11 @@ function _mainErrorHandler(err, req, res, next) {
         });
 }
 
-function startServer() {
+async function _startServer() {
     try {
-        mongoose.connect(variables.DB_CONNECTION_URL);
+        await mongoose.connect(variables.DB_CONNECTION_URL);
+
+        await dbUtil._createSuperAdmin();
 
         app.listen(variables.PORT, () => {
             console.log(`App listen on localhost//:${variables.PORT}`);
