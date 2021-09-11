@@ -1,22 +1,28 @@
 const Joi = require('joi');
 
-const { regexpEnum } = require('../constant');
+const validatorVariables = require('./validator-variables.enum');
 
 const checkAuthData = Joi.object({
-    email: Joi.string().regex(regexpEnum.EMAIL_REGEX).required().trim(),
-    password: Joi.string().regex(regexpEnum.PASSWORD_REGEX).required().trim(),
+    email: validatorVariables.email,
+    password: validatorVariables.password,
 });
 
 const checkPass = Joi.object({
-    password: Joi.string().regex(regexpEnum.PASSWORD_REGEX).required().trim()
+    password: validatorVariables.password
+});
+
+const checkChangePassData = Joi.object({
+    oldPassword: validatorVariables.password,
+    newPassword: validatorVariables.password
 });
 
 const checkMail = Joi.object({
-    email: Joi.string().regex(regexpEnum.EMAIL_REGEX).required().trim()
+    email: validatorVariables.email
 });
 
 module.exports = {
     checkAuthData,
     checkPass,
-    checkMail
+    checkMail,
+    checkChangePassData
 };

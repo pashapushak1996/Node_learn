@@ -17,11 +17,13 @@ const adminController = {
 
             const password = _getRandomPassword(8);
 
-            await dbModels.User.create({
+            const user = await dbModels.User.create({
                 name, email, password, role: userRolesEnum.ADMIN
             });
 
             const { action_token } = jwtService.generateActionToken(tokenTypesEnum.ACTIVATE_ACC);
+
+            await dbModels.ActionToken.create({ action_token, user: user._id });
 
             await emailService.sendMessage(
                 email,
