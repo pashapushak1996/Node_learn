@@ -31,6 +31,7 @@ router.get('/:userId',
 
 router.put('/:userId',
     generalMiddleware.dynamicValidator(userValidator.updateUser),
+    fileMiddleware.checkAvatar,
     authMiddleware.checkAccessToken,
     userMiddleware.getUserByDynamicParam(
         middlewareParamEnum.USER_ID,
