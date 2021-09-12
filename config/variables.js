@@ -7,7 +7,7 @@ module.exports = {
     FRONTEND_URL: process.env.FRONTEND_URL || 'www.google.com',
     AWS: {
         S3_NAME: process.env.AWS_S3_NAME || '',
-        S3_REGION: process.env.AWS_S3_REGION = '',
+        S3_REGION: process.env.AWS_S3_REGION || '',
         S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY || '',
         S3_SECRET_KEY: process.env.AWS_S3_SECRET_KEY || ''
     },
