@@ -3,16 +3,13 @@ const path = require('path');
 const uuid = require('uuid').v1;
 
 const {
-    AWS_S3_ACCESS_KEY,
-    AWS_S3_NAME,
-    AWS_S3_SECRET_KEY,
-    AWS_S3_REGION
-} = require('../config/variables');
+    variables
+} = require('../config');
 
 const bucket = new S3({
-    region: AWS_S3_REGION,
-    accessKeyId: AWS_S3_ACCESS_KEY,
-    secretAccessKey: AWS_S3_SECRET_KEY
+    region: variables.AWS_S3_REGION,
+    accessKeyId: variables.AWS_S3_ACCESS_KEY,
+    secretAccessKey: variables.AWS_S3_SECRET_KEY
 });
 
 module.exports = {
@@ -23,7 +20,7 @@ module.exports = {
 
         return bucket
             .upload({
-                Bucket: AWS_S3_NAME,
+                Bucket: variables.AWS_S3_NAME,
                 Body: data,
                 Key: fileName,
                 ContentType: mimetype
