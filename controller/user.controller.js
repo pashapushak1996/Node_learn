@@ -78,33 +78,33 @@ const userController = {
 
     updateUser: async (req, res, next) => {
         try {
-            let { user } = req;
+            const { _id, email } = req;
+
+            let updatedUser = await dbModels.User.findByIdAndUpdate({ _id }, req.body, {
+                new: true
+            });
 
             if (req.files && req.files.avatar) {
                 const s3Response = await s3Service.uploadFile(
                     req.files.avatar,
                     'users',
-                    user._id.toString()
+                    _id.toString()
                 );
 
-                user = await dbModels.User.findByIdAndUpdate(
-                    { _id: user._id },
+                updatedUser = await dbModels.User.findByIdAndUpdate(
+                    { _id },
                     { avatar: s3Response.Location },
                     { new: true }
                 );
-            } else {
-                user = await dbModels.User.findByIdAndUpdate({ _id: user._id }, req.body, {
-                    new: true
-                });
             }
 
             await emailService.sendMessage(
-                user.email,
+                email,
                 emailTemplatesEnum.ACCOUNT_UPDATED,
-                { userName: user.email }
+                { userName: updatedUser.name }
             );
 
-            const normalizedUser = userUtil.dataNormalizator(user);
+            const normalizedUser = userUtil.dataNormalizator(updatedUser);
 
             res.json(normalizedUser);
         } catch (e) {
