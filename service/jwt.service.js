@@ -6,10 +6,7 @@ const { statusCodeEnum, tokenTypesEnum } = require('../constant');
 
 const {
     variables: {
-        ACCESS_SECRET_KEY,
-        REFRESH_SECRET_KEY,
-        FORGET_PASS_SECRET_KEY,
-        ACTIVATE_ACC_SECRET_KEY
+        JWT_KEYS
     }
 } = require('../config');
 
@@ -17,8 +14,8 @@ const verifyTokenPromisify = promisify(jwt.verify);
 
 const jwtService = {
     generateTokenPair: () => {
-        const access_token = jwt.sign({}, ACCESS_SECRET_KEY, { expiresIn: '15m' });
-        const refresh_token = jwt.sign({}, ACCESS_SECRET_KEY, { expiresIn: '31d' });
+        const access_token = jwt.sign({}, JWT_KEYS.ACCESS_SECRET_KEY, { expiresIn: '15m' });
+        const refresh_token = jwt.sign({}, JWT_KEYS.REFRESH_SECRET_KEY, { expiresIn: '31d' });
 
         return {
             access_token,
@@ -29,8 +26,8 @@ const jwtService = {
     verifyToken: async (token, tokenType = tokenTypesEnum.ACCESS) => {
         try {
             const secretWord = tokenType === tokenTypesEnum.ACCESS
-                ? ACCESS_SECRET_KEY
-                : REFRESH_SECRET_KEY;
+                ? JWT_KEYS.ACCESS_SECRET_KEY
+                : JWT_KEYS.REFRESH_SECRET_KEY;
 
             await verifyTokenPromisify(token, secretWord);
         } catch (e) {
@@ -62,10 +59,10 @@ function _getSecretWord(tokenType) {
 
     switch (tokenType) {
         case tokenTypesEnum.FORGOT_PASS:
-            secretWord = FORGET_PASS_SECRET_KEY;
+            secretWord = JWT_KEYS.FORGET_PASS_SECRET_KEY;
             break;
         case tokenTypesEnum.ACTIVATE_ACC:
-            secretWord = ACTIVATE_ACC_SECRET_KEY;
+            secretWord = JWT_KEYS.ACTIVATE_ACC_SECRET_KEY;
             break;
         default:
             throw new ErrorHandler(statusCodeEnum.SERVER_ERROR, errorMessageEnum.INTERNAL_SERVER_ERROR);
