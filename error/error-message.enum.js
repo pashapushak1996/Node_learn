@@ -9,5 +9,7 @@ module.exports = {
     ACCESS_DENIED: 'Access denied',
     TEMPLATE_NOT_FOUND: 'Template not found',
     VALIDATION_ERR: 'Validation failed',
-    ACCOUNT_NOT_ACTIVE: 'Account is not active'
+    ACCOUNT_NOT_ACTIVE: 'Account is not active',
+    FILE_EXTENSION_ERR: 'File extension not valid',
+    LARGE_FILE_ERR: 'File is too large'
 };

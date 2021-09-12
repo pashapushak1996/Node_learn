@@ -5,7 +5,12 @@ const {
     tokenTypesEnum
 } = require('../constant');
 const { dbModels } = require('../dataBase');
-const { emailService, passwordService, jwtService } = require('../service');
+const {
+    emailService,
+    passwordService,
+    jwtService,
+    s3Service
+} = require('../service');
 const { userUtil } = require('../util');
 
 const userController = {
@@ -33,13 +38,28 @@ const userController = {
 
             const hashPassword = await passwordService.hashPassword(password);
 
-            const user = await dbModels.User.create({ ...req.body, password: hashPassword });
+            let createdUser = await dbModels.User.create({ ...req.body, password: hashPassword });
+
+            if (req.files && req.files.avatar) {
+                const { _id } = createdUser;
+                const s3Response = await s3Service.uploadFile(
+                    req.files.avatar,
+                    'users',
+                    _id.toString()
+                );
+
+                createdUser = await dbModels.User.findByIdAndUpdate(
+                    { _id },
+                    { avatar: s3Response.Location },
+                    { new: true }
+                );
+            }
 
             const { action_token } = await jwtService.generateActionToken(tokenTypesEnum.ACTIVATE_ACC);
 
-            await dbModels.ActionToken.create({ action_token, user: user._id });
+            await dbModels.ActionToken.create({ action_token, user: createdUser._id });
 
-            const normalizedUser = userUtil.dataNormalizator(user.toJSON());
+            const normalizedUser = userUtil.dataNormalizator(createdUser.toJSON());
 
             await emailService.sendMessage(
                 normalizedUser.email,
@@ -49,7 +69,7 @@ const userController = {
 
             res
                 .status(statusCodeEnum.CREATED)
-                .json({ normalizedUser, action_token });
+                .json({ createdUser, action_token });
         } catch (e) {
             next(e);
         }
@@ -59,17 +79,31 @@ const userController = {
         try {
             const { _id, email } = req.user;
 
-            const user = await dbModels.User.findByIdAndUpdate({ _id }, req.body, {
+            let updatedUser = await dbModels.User.findByIdAndUpdate({ _id }, req.body, {
                 new: true
             });
+
+            if (req.files && req.files.avatar) {
+                const s3Response = await s3Service.uploadFile(
+                    req.files.avatar,
+                    'users',
+                    _id.toString()
+                );
+
+                updatedUser = await dbModels.User.findByIdAndUpdate(
+                    { _id },
+                    { avatar: s3Response.Location },
+                    { new: true }
+                );
+            }
 
             await emailService.sendMessage(
                 email,
                 emailTemplatesEnum.ACCOUNT_UPDATED,
-                { userName: user.name }
+                { userName: updatedUser.name }
             );
 
-            const normalizedUser = userUtil.dataNormalizator(user);
+            const normalizedUser = userUtil.dataNormalizator(updatedUser);
 
             res.json(normalizedUser);
         } catch (e) {
