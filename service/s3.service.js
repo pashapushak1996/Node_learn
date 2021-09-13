@@ -28,6 +28,17 @@ module.exports = {
                 ContentType: mimetype
             })
             .promise();
+    },
+
+    deleteFile: (filePath) => {
+        const Key = filePath.split(AWS.AMAZON_AWS_COM).pop();
+
+        return bucket
+            .deleteObject({
+                Bucket: AWS.S3_NAME,
+                Key
+            })
+            .promise();
     }
 };
 

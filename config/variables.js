@@ -9,7 +9,8 @@ module.exports = {
         S3_NAME: process.env.AWS_S3_NAME || '',
         S3_REGION: process.env.AWS_S3_REGION || '',
         S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY || '',
-        S3_SECRET_KEY: process.env.AWS_S3_SECRET_KEY || ''
+        S3_SECRET_KEY: process.env.AWS_S3_SECRET_KEY || '',
+        AMAZON_AWS_COM: 'amazonaws.com/'
     },
     JWT_KEYS: {
         ACTIVATE_ACC_SECRET_KEY: process.env.ACTIVATE_ACC_SECRET_KEY || 'activate',

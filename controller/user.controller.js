@@ -78,16 +78,22 @@ const userController = {
 
     updateUser: async (req, res, next) => {
         try {
-            const { _id, email } = req;
+            const { loggedUser: { _id, email }, baseUrl } = req;
+
+            const usersString = baseUrl.split('/').pop();
 
             let updatedUser = await dbModels.User.findByIdAndUpdate({ _id }, req.body, {
                 new: true
             });
 
             if (req.files && req.files.avatar) {
+                if (updatedUser.avatar) {
+                    await s3Service.deleteFile(updatedUser.avatar);
+                }
+
                 const s3Response = await s3Service.uploadFile(
                     req.files.avatar,
-                    'users',
+                    usersString,
                     _id.toString()
                 );
 
