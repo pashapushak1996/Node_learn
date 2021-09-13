@@ -78,7 +78,7 @@ const userController = {
 
     updateUser: async (req, res, next) => {
         try {
-            const { loggedUser: { _id, email }, baseUrl } = req;
+            const { user: { _id, email }, baseUrl } = req;
 
             const usersString = baseUrl.split('/').pop();
 
