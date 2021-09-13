@@ -121,31 +121,31 @@ const userController = {
     deleteUser: async (req, res, next) => {
         try {
             const {
-                user: {
-                    name: userName,
-                    email,
-                    _id
-                },
+                user,
                 loggedUser: {
                     role
                 },
             } = req;
 
-            await dbModels.User.findOneAndDelete({ _id });
+            if (user.avatar) {
+                await s3Service.deleteFile(user.avatar);
+            }
+
+            await dbModels.User.findOneAndDelete({ _id: user });
 
             const isAdmin = role === userRolesEnum.ADMIN;
 
             if (isAdmin) {
                 await emailService.sendMessage(
-                    email,
+                    user.email,
                     emailTemplatesEnum.DELETE_ACCOUNT_ADMIN,
-                    { userName }
+                    { userName: user.name }
                 );
             } else {
                 await emailService.sendMessage(
-                    email,
+                    user.email,
                     emailTemplatesEnum.DELETE_ACCOUNT_USER,
-                    { userName }
+                    { userName: user.name }
                 );
             }
 
