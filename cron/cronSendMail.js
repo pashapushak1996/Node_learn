@@ -2,9 +2,7 @@ const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 
 const { emailTemplatesEnum } = require('../constant');
-
 const { dbModels } = require('../dataBase');
-
 const { emailService } = require('../service');
 
 dayjs.extend(utc);
