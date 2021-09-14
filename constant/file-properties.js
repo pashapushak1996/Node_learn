@@ -7,5 +7,8 @@ module.exports = {
             'image/jpeg',
             'image/png'
         ]
+    },
+    itemTypes: {
+        users: 'users'
     }
 };

@@ -1,4 +1,7 @@
 const {
+    fileProperties: {
+        itemTypes
+    },
     statusCodeEnum,
     emailTemplatesEnum,
     userRolesEnum,
@@ -45,7 +48,7 @@ const userController = {
 
                 const s3Response = await s3Service.uploadFile(
                     req.files.avatar,
-                    'users',
+                    itemTypes.users,
                     _id.toString()
                 );
 
@@ -78,9 +81,7 @@ const userController = {
 
     updateUser: async (req, res, next) => {
         try {
-            const { user: { _id, email }, baseUrl } = req;
-
-            const usersString = baseUrl.split('/').pop();
+            const { _id, email } = req.user;
 
             let updatedUser = await dbModels.User.findByIdAndUpdate({ _id }, req.body, {
                 new: true
@@ -93,7 +94,7 @@ const userController = {
 
                 const s3Response = await s3Service.uploadFile(
                     req.files.avatar,
-                    usersString,
+                    itemTypes.users,
                     _id.toString()
                 );
 
