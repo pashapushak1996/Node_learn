@@ -44,5 +44,9 @@ module.exports = {
     [emailTemplatesEnum.ACCOUNT_ACTIVATED]: {
         templateName: 'accountActivated',
         subject: 'Activate account'
+    },
+    [emailTemplatesEnum.ACCOUNT_REMIND]: {
+        templateName: 'accountRemind',
+        subject: 'Remind'
     }
 };

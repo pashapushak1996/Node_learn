@@ -11,5 +11,6 @@ module.exports = {
     VALIDATION_ERR: 'Validation failed',
     ACCOUNT_NOT_ACTIVE: 'Account is not active',
     FILE_EXTENSION_ERR: 'File extension not valid',
-    LARGE_FILE_ERR: 'File is too large'
+    LARGE_FILE_ERR: 'File is too large',
+    CORS_ERR: 'Cors not allowed'
 };

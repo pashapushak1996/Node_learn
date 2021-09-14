@@ -5,6 +5,7 @@ module.exports = {
     NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL || 'example@gmail.com',
     NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD || '123456',
     FRONTEND_URL: process.env.FRONTEND_URL || 'www.google.com',
+    ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
     AWS: {
         S3_NAME: process.env.AWS_S3_NAME || '',
         S3_REGION: process.env.AWS_S3_REGION || '',

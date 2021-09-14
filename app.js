@@ -1,20 +1,39 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+const cors = require('cors');
 const expressFileUpload = require('express-fileupload');
+const rateLimit = require('express-rate-limit');
 
 require('dotenv').config();
 
 const { statusCodeEnum } = require('./constant');
 const { variables } = require('./config');
+const cronJobs = require('./cron');
 const { errorMessageEnum, ErrorHandler } = require('./error');
 const { authRouter, userRouter, adminRouter } = require('./router');
 const { dbUtil } = require('./util');
 
 const app = express();
 
+app.use(helmet());
+
+app.use(cors({ origin: _configureCors }));
+
+app.use(rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(expressFileUpload());
+
+if (process.env.NODE_DEV === 'dev') {
+    // eslint-disable-next-line import/no-extraneous-dependencies
+    const morgan = require('morgan');
+    app.use(morgan('dev'));
+}
 
 _startServer();
 
@@ -44,6 +63,8 @@ async function _startServer() {
     try {
         await mongoose.connect(variables.DB_CONNECTION_URL);
 
+        cronJobs();
+
         await dbUtil._createSuperAdmin();
 
         app.listen(variables.PORT, () => {
@@ -52,4 +73,18 @@ async function _startServer() {
     } catch (e) {
         throw new ErrorHandler(statusCodeEnum.SERVER_ERROR, errorMessageEnum.INTERNAL_SERVER_ERROR);
     }
+}
+
+function _configureCors(origin, cb) {
+    const whiteList = variables.ALLOWED_ORIGINS.split(';');
+
+    if (!origin && process.env.NODE_DEV === 'dev') {
+        return cb(null, true);
+    }
+
+    if (!whiteList.includes(origin)) {
+        return cb(new ErrorHandler(statusCodeEnum.FORBIDDEN, errorMessageEnum.CORS_ERR), false);
+    }
+
+    return cb(null, true);
 }
