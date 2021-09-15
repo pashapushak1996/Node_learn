@@ -12,19 +12,7 @@ module.exports = async () => {
 
     const AuthTokens = await dbModels.OAuth.find({ createdAt: { $lte: previousDate } });
 
-    const users = AuthTokens.map((Obj) => Obj.user);
-
-    await _sendEmailRecursion(users);
+    await Promise.all(AuthTokens.map(async ({ user }) => {
+        await emailService.sendMessage(user.email, emailTemplatesEnum.ACCOUNT_REMIND, { userName: user.name });
+    }));
 };
-
-let i = 0;
-
-async function _sendEmailRecursion(items) {
-    i++;
-    if (i > items.length - 1) {
-        return;
-    }
-    const { email, name } = items[i];
-
-    await emailService.sendMessage(email, emailTemplatesEnum.ACCOUNT_REMIND, { userName: name });
-}
