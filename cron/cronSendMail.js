@@ -12,7 +12,9 @@ module.exports = async () => {
 
     const AuthTokens = await dbModels.OAuth.find({ createdAt: { $lte: previousDate } });
 
-    await Promise.all(AuthTokens.map(async ({ user }) => {
-        await emailService.sendMessage(user.email, emailTemplatesEnum.ACCOUNT_REMIND, { userName: user.name });
+    await Promise.all(AuthTokens.map(async (token) => {
+        const { email, name } = token.user;
+
+        await emailService.sendMessage(email, emailTemplatesEnum.ACCOUNT_REMIND, { userName: name });
     }));
 };
