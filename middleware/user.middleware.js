@@ -28,7 +28,7 @@ const userMiddleware = {
             const { user } = req;
 
             if (!user) {
-                throw new ErrorHandler(statusCodeEnum.NOT_FOUND, errorMessageEnum.USER_NOT_FOUND);
+                throw new ErrorHandler(statusCodeEnum.NOT_FOUND, errorMessageEnum.RECORD_NOT_FOUND);
             }
 
             next();

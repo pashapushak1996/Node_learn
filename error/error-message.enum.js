@@ -1,7 +1,7 @@
 module.exports = {
     NOT_FOUND_ERR: 'Not found',
     INTERNAL_SERVER_ERROR: 'Internal server error',
-    USER_NOT_FOUND: 'User not found',
+    RECORD_NOT_FOUND: 'Record not found',
     EMAIL_IS_EXIST: 'Email is exist',
     EMAIL_OR_PASSWORD_ERR: 'Email or password is wrong',
     WRONG_TOKEN: 'Wrong token',
@@ -12,5 +12,5 @@ module.exports = {
     ACCOUNT_NOT_ACTIVE: 'Account is not active',
     FILE_EXTENSION_ERR: 'File extension not valid',
     LARGE_FILE_ERR: 'File is too large',
-    CORS_ERR: 'Cors not allowed'
+    CORS_ERR: 'Cors not allowed',
 };

@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const expressFileUpload = require('express-fileupload');
 const rateLimit = require('express-rate-limit');
+const swaggerUi = require('swagger-ui-express');
 
 require('dotenv').config();
 
@@ -11,7 +12,12 @@ const { statusCodeEnum } = require('./constant');
 const { variables } = require('./config');
 const cronJobs = require('./cron');
 const { errorMessageEnum, ErrorHandler } = require('./error');
-const { authRouter, userRouter, adminRouter } = require('./router');
+const {
+    authRouter,
+    userRouter,
+    adminRouter,
+    carRouter
+} = require('./router');
 const { dbUtil } = require('./util');
 
 const app = express();
@@ -37,8 +43,10 @@ if (process.env.NODE_DEV === 'dev') {
 
 _startServer();
 
+app.use('/docs', swaggerUi.serve, swaggerUi.setup());
 app.use('/admin', adminRouter);
 app.use('/auth', authRouter);
+app.use('/cars', carRouter);
 app.use('/users', userRouter);
 app.use('*', _notFoundErrorHandler);
 app.use(_mainErrorHandler);

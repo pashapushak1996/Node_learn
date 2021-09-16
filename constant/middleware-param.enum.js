@@ -4,5 +4,6 @@ module.exports = {
     USER_ID: 'userId',
     DB_ID: '_id',
     EMAIL: 'email',
-    AUTHORIZATION: 'Authorization'
+    AUTHORIZATION: 'Authorization',
+    CAR_ID: 'carId'
 };
