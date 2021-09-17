@@ -24,6 +24,56 @@
             "type": "number",
             "required": false,
             "description": "How many users will be returned"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "User name",
+            "default": "Yurii",
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "User email",
+            "default": "ivan1005@gmail.com",
+            "type": "string"
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "description": "User role",
+            "default": "user",
+            "type": "array",
+            "enum": [
+              "user",
+              "admin"
+            ]
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "default": 1,
+            "type": "number"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Sorted by",
+            "default": "createdAt",
+            "type": "string"
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "Order",
+            "default": "asc",
+            "type": "array",
+            "enum": [
+              "asc",
+              "desc"
+            ]
           }
         ],
         "responses": {
@@ -106,6 +156,22 @@
             "type": "number",
             "required": true,
             "description": "User Id"
+          },
+          {
+            "name": "name",
+            "in": "body",
+            "type": "string",
+            "required": true,
+            "default": "Yurii",
+            "description": "User name"
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "type": "string",
+            "required": true,
+            "default": "john.doe@example.com",
+            "description": "User email"
           }
         ],
         "responses": {
