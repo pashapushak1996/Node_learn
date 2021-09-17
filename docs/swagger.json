@@ -125,7 +125,7 @@
             "description": "User age"
           },
           {
-            "name":"avatar",
+            "name": "avatar",
             "in": "formData",
             "type": "file",
             "description": "User avatar"
@@ -169,7 +169,7 @@
             "description": "Single user",
             "schema": {
               "type": "object",
-              "items": {
+              "example": {
                 "$ref": "#/definitions/singleUser"
               }
             }
@@ -219,7 +219,7 @@
             "description": "User age"
           },
           {
-            "name":"avatar",
+            "name": "avatar",
             "in": "formData",
             "type": "file",
             "description": "User avatar"
