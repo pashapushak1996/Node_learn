@@ -123,6 +123,12 @@
             "type": "number",
             "default": 25,
             "description": "User age"
+          },
+          {
+            "name":"avatar",
+            "in": "formData",
+            "type": "file",
+            "description": "User avatar"
           }
         ],
         "responses": {
@@ -211,6 +217,12 @@
             "type": "number",
             "default": 25,
             "description": "User age"
+          },
+          {
+            "name":"avatar",
+            "in": "formData",
+            "type": "file",
+            "description": "User avatar"
           }
         ],
         "responses": {
