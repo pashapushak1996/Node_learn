@@ -68,7 +68,7 @@
             "description": "User email"
           },
           {
-            "age": "age",
+            "name": "age",
             "in": "body",
             "type": "number",
             "default": 25,
@@ -100,7 +100,7 @@
         "description": "Single user",
         "parameters": [
           {
-            "userId": "userId",
+            "name": "userId",
             "in": "query",
             "default": "saf54sf32e3saf2332232fde",
             "type": "number",
@@ -134,7 +134,7 @@
         "operationId": "updateUser",
         "parameters": [
           {
-            "userId": "userId",
+            "name": "userId",
             "in": "query",
             "type": "string",
             "required": true,
@@ -186,7 +186,7 @@
         "operationId": "deleteUser",
         "parameters": [
           {
-            "userId": "userId",
+            "name": "userId",
             "in": "query",
             "type": "string",
             "required": true,
@@ -299,7 +299,7 @@
         "description": "Single car",
         "parameters": [
           {
-            "carId": "userId",
+            "name": "userId",
             "in": "query",
             "default": "saf54sf32e3saf2332232fde",
             "type": "number",
