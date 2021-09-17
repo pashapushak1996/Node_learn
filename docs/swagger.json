@@ -206,7 +206,7 @@
             "description": "User email"
           },
           {
-            "age": "age",
+            "name": "age",
             "in": "body",
             "type": "number",
             "default": 25,
