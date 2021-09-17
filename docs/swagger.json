@@ -156,22 +156,6 @@
             "type": "number",
             "required": true,
             "description": "User Id"
-          },
-          {
-            "name": "name",
-            "in": "body",
-            "type": "string",
-            "required": true,
-            "default": "Yurii",
-            "description": "User name"
-          },
-          {
-            "name": "email",
-            "in": "body",
-            "type": "string",
-            "required": true,
-            "default": "john.doe@example.com",
-            "description": "User email"
           }
         ],
         "responses": {
