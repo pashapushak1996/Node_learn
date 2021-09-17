@@ -226,7 +226,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "User was updated",
             "schema": {
               "$ref": "#/definitions/singleUser"
