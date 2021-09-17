@@ -1,10 +1,11 @@
-const { dbModels: { Car } } = require('../dataBase');
 const { statusCodeEnum } = require('../constant');
+const { dbModels: { Car } } = require('../dataBase');
+const { carService } = require('../service');
 
 const carController = {
     getAllCars: async (req, res, next) => {
         try {
-            const cars = await Car.find();
+            const cars = await carService.getAllCars(req.query);
 
             res.json(cars);
         } catch (e) {
