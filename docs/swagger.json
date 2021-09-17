@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Apr-2021 Swagger",
+    "title": "Lesson_12",
     "version": "0.0.1",
-    "description": "Hello wordl",
+    "description": "Learn node swagger",
     "contact": {
       "name": "Pavlo"
     }
