@@ -364,7 +364,7 @@
         "description": "Single car",
         "parameters": [
           {
-            "name": "userId",
+            "name": "carId",
             "in": "query",
             "default": "saf54sf32e3saf2332232fde",
             "type": "number",
