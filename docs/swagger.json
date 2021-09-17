@@ -281,12 +281,58 @@
         "description": "Get all cars",
         "parameters": [
           {
-            "count": "count",
+            "name": "count",
             "in": "query",
             "default": 10,
             "type": "number",
             "required": false,
-            "description": "How many cars will be returned"
+            "description": "How many users will be returned"
+          },
+          {
+            "name": "producer",
+            "in": "query",
+            "description": "Car producer",
+            "default": "Bmw",
+            "type": "string"
+          },
+          {
+            "name": "model",
+            "in": "query",
+            "description": "Car model",
+            "default": "X6",
+            "type": "string"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Car year",
+            "default": 2005,
+            "type": "number"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "default": 1,
+            "type": "number"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Sorted by",
+            "default": "createdAt",
+            "type": "string"
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "Order",
+            "default": "asc",
+            "type": "array",
+            "enum": [
+              "asc",
+              "desc"
+            ]
           }
         ],
         "responses": {
@@ -343,7 +389,10 @@
           "200": {
             "description": "Car was created",
             "schema": {
-              "$ref": "#/definitions/singleCar"
+              "type": "object",
+              "example": {
+                "$ref": "#/definitions/singleCar"
+              }
             }
           },
           "400": {
