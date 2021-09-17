@@ -229,7 +229,10 @@
           "201": {
             "description": "User was updated",
             "schema": {
-              "$ref": "#/definitions/singleUser"
+              "type": "object",
+              "example": {
+                "$ref": "#/definitions/singleUser"
+              }
             }
           },
           "400": {
