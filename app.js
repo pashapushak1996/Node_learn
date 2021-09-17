@@ -19,6 +19,7 @@ const {
     carRouter
 } = require('./router');
 const { dbUtil } = require('./util');
+const swaggerJson = require('./docs/swagger.json');
 
 const app = express();
 
@@ -43,7 +44,7 @@ if (process.env.NODE_DEV === 'dev') {
 
 _startServer();
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup());
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerJson));
 app.use('/admin', adminRouter);
 app.use('/auth', authRouter);
 app.use('/cars', carRouter);

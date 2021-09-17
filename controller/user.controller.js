@@ -12,14 +12,15 @@ const {
     emailService,
     passwordService,
     jwtService,
-    s3Service
+    s3Service,
+    userService
 } = require('../service');
 const { userUtil } = require('../util');
 
 const userController = {
     getUsers: async (req, res, next) => {
         try {
-            const users = await dbModels.User.find(req.query);
+            const users = await userService.getAllUsers(req.query);
 
             res.json(users);
         } catch (e) {

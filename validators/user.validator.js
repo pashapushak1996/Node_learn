@@ -2,6 +2,7 @@ const Joi = require('joi');
 
 const { userRolesEnum } = require('../constant');
 const validatorVariables = require('./validator-variables.enum');
+const { CURRENT_YEAR } = require('../config/variables');
 
 const createUser = Joi.object({
     name: Joi
@@ -20,6 +21,7 @@ const createUser = Joi.object({
         .string()
         .default(userRolesEnum.USER)
         .valid(...Object.values(userRolesEnum)),
+    age: Joi.number().min(CURRENT_YEAR - 6).max(CURRENT_YEAR - 110)
 });
 
 const updateUser = Joi.object({

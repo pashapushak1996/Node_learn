@@ -1,0 +1,429 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Apr-2021 Swagger",
+    "version": "0.0.1",
+    "description": "Hello wordl",
+    "contact": {
+      "name": "Viktor"
+    }
+  },
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "getAllUsers",
+        "description": "Get all user",
+        "parameters": [
+          {
+            "name": "count",
+            "in": "query",
+            "default": 10,
+            "type": "number",
+            "required": false,
+            "description": "How many users will be returned"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All users info array",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/singleUser"
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "description": "Create user",
+        "operationId": "createUser",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "body",
+            "type": "string",
+            "required": true,
+            "default": "Yurii",
+            "description": "User name"
+          },
+          {
+            "email": "email",
+            "in": "body",
+            "type": "string",
+            "required": true,
+            "default": "john.doe@example.com",
+            "description": "User email"
+          },
+          {
+            "age": "age",
+            "in": "body",
+            "type": "number",
+            "default": 25,
+            "description": "User age"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was created",
+            "schema": {
+              "$ref": "#/definitions/singleUser"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      }
+    },
+    "/users/:userId": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "getSingleUser",
+        "description": "Single user",
+        "parameters": [
+          {
+            "userId": "userId",
+            "in": "query",
+            "default": "saf54sf32e3saf2332232fde",
+            "type": "number",
+            "required": true,
+            "description": "User Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single user",
+            "schema": {
+              "type": "object",
+              "items": {
+                "$ref": "#/definitions/singleUser"
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "description": "Update user",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "userId": "userId",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "default": "123werewfdsaf213fdsdf",
+            "description": "User id"
+          },
+          {
+            "name": "name",
+            "in": "body",
+            "type": "string",
+            "default": "Yurii",
+            "description": "User name"
+          },
+          {
+            "email": "email",
+            "in": "body",
+            "type": "string",
+            "default": "john.doe@example.com",
+            "description": "User email"
+          },
+          {
+            "age": "age",
+            "in": "body",
+            "type": "number",
+            "default": 25,
+            "description": "User age"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was updated",
+            "schema": {
+              "$ref": "#/definitions/singleUser"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "description": "Delete user",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "userId": "userId",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "default": "123werewfdsaf213fdsdf",
+            "description": "User id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User was deleted"
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      }
+    },
+    "/cars": {
+      "get": {
+        "tags": [
+          "cars"
+        ],
+        "operationId": "getAllCars",
+        "description": "Get all cars",
+        "parameters": [
+          {
+            "count": "count",
+            "in": "query",
+            "default": 10,
+            "type": "number",
+            "required": false,
+            "description": "How many cars will be returned"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All cars info arr",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/singleCar"
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "cars"
+        ],
+        "description": "Create car",
+        "operationId": "createCar",
+        "parameters": [
+          {
+            "producer": "producer",
+            "in": "body",
+            "type": "string",
+            "required": true,
+            "default": "BWM",
+            "description": "Car producer"
+          },
+          {
+            "model": "model",
+            "in": "body",
+            "type": "string",
+            "required": true,
+            "default": "X6",
+            "description": "Car model"
+          },
+          {
+            "year": "year",
+            "in": "body",
+            "type": "number",
+            "required": true,
+            "default": "X6",
+            "description": "Car model"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Car was created",
+            "schema": {
+              "$ref": "#/definitions/singleCar"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      }
+    },
+    "/cars/carId": {
+      "get": {
+        "tags": [
+          "cars"
+        ],
+        "operationId": "getSingleCar",
+        "description": "Single car",
+        "parameters": [
+          {
+            "carId": "userId",
+            "in": "query",
+            "default": "saf54sf32e3saf2332232fde",
+            "type": "number",
+            "required": true,
+            "description": "Car Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single car",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/singleCar"
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "cars"
+        ],
+        "description": "Delete car",
+        "operationId": "deleteCar",
+        "parameters": [
+          {
+            "userId": "userId",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "default": "123werewfdsaf213fdsdf",
+            "description": "Car id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Car was deleted"
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "errorSchema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Error message",
+          "example": "Email or password is wrong"
+        },
+        "code": {
+          "description": "custom code",
+          "example": 228,
+          "type": "number"
+        }
+      }
+    },
+    "singleUser": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "sdflmk43trn45tgioerg5"
+        },
+        "name": {
+          "type": "string",
+          "example": "John"
+        },
+        "email": {
+          "type": "string",
+          "example": "john.doe@example.com"
+        },
+        "age": {
+          "type": "number",
+          "example": 25
+        },
+        "isActivated": {
+          "type": "boolean",
+          "example": true
+        },
+        "role": {
+          "type": "string",
+          "example": "user"
+        }
+      },
+      "isActivated": {
+        "type": "boolean",
+        "example": true
+      }
+    },
+    "singleCar": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "saf767asf65asdasfew"
+        },
+        "model": {
+          "type": "string",
+          "example": "X6"
+        },
+        "producer": {
+          "type": "string",
+          "example": "BWM"
+        },
+        "year": {
+          "type": "number",
+          "example": 2001
+        }
+      }
+    }
+  }
+}
