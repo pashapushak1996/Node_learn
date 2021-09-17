@@ -447,7 +447,7 @@
         "operationId": "deleteCar",
         "parameters": [
           {
-            "userId": "userId",
+            "name": "userId",
             "in": "query",
             "type": "string",
             "required": true,
